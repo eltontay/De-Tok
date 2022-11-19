@@ -1,7 +1,7 @@
 export const OwnerAddress = "0x9680A866299a8D021114Ac6A460Ba8e5860B68Fb";
-export const DTok_Contract_Address = "0x20445e4711A55419bc7c35030D404973eD643BC4";
-export const DVid_Contract_Address = "0xE482bbB0d6dd5dEEC2B937cFe91B07561847AAA7";
-export const DeTok_Contract_Address ="0x837949241023C0bd743633bF20e06ef83A6a793E";
+export const DTok_Contract_Address = "0x45Ab85428Dd8FDF68676E9B8a54758DB3472D01b";
+export const DVid_Contract_Address = "0x556d67f468cDC66B16802cb6680ad05cCeA4E1D0";
+export const DeTok_Contract_Address ="0x8F48Cd80fBCefBda966e50cCD3E38Fee19a111E2";
 
 export const DTOK_ABI =[
 	{
@@ -1046,6 +1046,19 @@ export const DETOK_ABI = [
 		"name": "deleteVideo",
 		"outputs": [],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getAllCid",
+		"outputs": [
+			{
+				"internalType": "string[]",
+				"name": "",
+				"type": "string[]"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
