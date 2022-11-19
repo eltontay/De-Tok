@@ -127,6 +127,7 @@ export default function MintVideo() {
               <div
                 {...getRootProps()}
                 className="h-40 cursor-pointer border border-dashed border-white flex items-center justify-center"
+                onClick={(e) => e.stopPropagation()}
               >
                 <input {...getInputProps()} />
                 <div className="px-4">
