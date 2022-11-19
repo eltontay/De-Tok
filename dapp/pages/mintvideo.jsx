@@ -1,8 +1,16 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Head from "next/head";
 import styles from "../styles/MintVideo.module.css";
 import { useDropzone } from "react-dropzone";
 import { Web3Storage } from "web3.storage";
+import {
+  useAccount,
+  useContractWrite,
+  usePrepareContractWrite,
+  useProvider,
+  useSigner,
+} from "wagmi";
+import { DETOK_ABI, DeTok_Contract_Address } from "../constants/constants";
 
 function makeStorageClient() {
   return new Web3Storage({ token: process.env.NEXT_PUBLIC_WEB3STORAGE_TOKEN });
@@ -45,6 +53,23 @@ export default function MintVideo() {
   const [author, setAuthor] = useState("");
   const [video, setVideo] = useState();
   const [payable, setPayable] = useState(false);
+  const [cid, setCid] = useState();
+
+  const { config } = usePrepareContractWrite({
+    address: DeTok_Contract_Address,
+    abi: DETOK_ABI,
+    functionName: "mintVideo",
+    args: ["uri", cid, payable],
+  });
+
+  const { data, isLoading, isSuccess, write } = useContractWrite(config);
+  console.log(data, isLoading, isSuccess);
+
+  useEffect(() => {
+    if (cid) {
+      write?.();
+    }
+  }, [cid]);
 
   const onSubmit = async () => {
     if (!video) {
@@ -55,11 +80,14 @@ export default function MintVideo() {
     console.log(jsonFile);
     console.log(video);
     const cid = await storeContent([video, jsonFile]);
+    setCid(cid);
   };
+
   const onDrop = useCallback(async (acceptedFiles) => {
     // const cid = await storeContent(acceptedFiles);
     setVideo(acceptedFiles[0]);
   }, []);
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     maxSize: 5242880, //5MB
@@ -139,7 +167,6 @@ export default function MintVideo() {
             )}
           </label>
           <label className="w-full font-bold pt-6">
-            {/* <div className="">Payable</div> */}
             <input
               type="checkbox"
               value={payable}
