@@ -4,13 +4,6 @@ import styles from "../styles/MintVideo.module.css";
 import { useDropzone } from "react-dropzone";
 import { Web3Storage } from "web3.storage";
 
-const style = {
-  width: 200,
-  height: 150,
-  border: "1px dotted #888",
-  cursor: "pointer",
-};
-
 function makeStorageClient() {
   return new Web3Storage({ token: process.env.NEXT_PUBLIC_WEB3STORAGE_TOKEN });
 }
@@ -22,8 +15,32 @@ const StoreContent = async (files) => {
   setTimeout(3000);
   return cid;
 };
+
+const hoge = async () => {
+  // const cid = await storage.put(files,options);
+  const storage = makeStorageClient();
+  const cid = "bafybeigkdrxadzsbdeyomforg7yzvm2wrz35clnp6ifnwxxhwjohz7xvpm";
+
+  // const resdata = await storage.get(cid);
+  // const filesReterived = await resdata.files();
+  // for (const file of filesReterived) {
+  //   console.log(file);
+  //   console.log(`${file.cid} ${file.name} ${file.size}`);
+  // }
+  const res = await storage.status(cid);
+  console.log(res);
+};
+// hoge();
 // cid: bafybeigkdrxadzsbdeyomforg7yzvm2wrz35clnp6ifnwxxhwjohz7xvpm
+
 export default function MintVideo() {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [author, setAuthor] = useState("");
+
+  const onSubmit = () => {
+    console.log("onSubmit");
+  };
   const onDrop = useCallback(async (acceptedFiles) => {
     console.log("uploading...");
     const cid = await StoreContent(acceptedFiles);
@@ -42,18 +59,66 @@ export default function MintVideo() {
       </Head>
 
       <main className={styles.main}>
-        <div className={styles.title}>
-          <span className={`${styles.titleWord} ${styles.word2}`}>
-            Mint a Video
-          </span>
-        </div>
-        <div {...getRootProps()} style={style}>
-          <input {...getInputProps()} />
-          {isDragActive ? (
-            <p>Drop the files here ...</p>
-          ) : (
-            <p>Drag 'n' drop some files here, or click to select files</p>
-          )}
+        <div className="flex flex-col items-center h-full">
+          <div className="text-2xl pb-4">Mint a Video</div>
+          <label className="w-full font-bold">
+            Title
+            <input
+              className="w-full p-3 my-2 border rounded focus:outline-none focus:ring-2"
+              placeholder=""
+              type="text"
+              value={title}
+              onChange={(event) => {
+                setTitle(event.target.value);
+              }}
+            />
+          </label>
+          <label className="w-full font-bold">
+            Description
+            <textarea
+              className="w-full p-3 my-2 border rounded focus:outline-none focus:ring-2"
+              placeholder=""
+              type="text"
+              value={description}
+              onChange={(event) => {
+                setDescription(event.target.value);
+              }}
+            />
+          </label>
+          <label className="w-full font-bold">
+            Author
+            <input
+              className="w-full p-3 my-2 border rounded focus:outline-none focus:ring-2"
+              placeholder=""
+              type="text"
+              value={author}
+              onChange={(event) => {
+                setAuthor(event.target.value);
+              }}
+            />
+          </label>
+          <label className="w-full font-bold">
+            Video
+            <div
+              {...getRootProps()}
+              className="h-40 cursor-pointer border border-dashed border-white flex items-center justify-center"
+            >
+              <input {...getInputProps()} />
+              <div className="px-4">
+                {isDragActive
+                  ? "Drop the files here ..."
+                  : "Drag & drop some files here, or click to select files"}
+              </div>
+            </div>
+          </label>
+          <div className="pt-6">
+            <button
+              className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+              onClick={() => onSubmit()}
+            >
+              Mint Video
+            </button>
+          </div>
         </div>
       </main>
     </>
