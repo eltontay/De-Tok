@@ -60,12 +60,12 @@ module.exports = async ({ deployments }) => {
         log: true,
     })
 
-    const deTokCoin = await deployments.get("DeTokCoin")
-    const deTokVideo = await deployments.get("DeTokVideo")
+    const dTok = await deployments.get("DTok")
+    const dVid = await deployments.get("DVid")
 
     await deploy("DeTok", {
         from: deployer.address,
-        args: [deTokCoin.address, deTokVideo.address],
+        args: [dTok.address, dVid.address],
         gasLimit: 1000000000, // BlockGasLimit / 10
         maxPriorityFeePerGas: priorityFee,
         log: true,
