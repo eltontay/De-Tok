@@ -19,9 +19,9 @@ contract DeTok {
 
     // Constants
     uint256 private constant TRENDING_VIEWS_THRESHOLD = 10; // dynamic with default value, setting to 10 for testing purposes
-    uint256 private constant CLAIMABLE_TOKEN = 100; // fixed initial claimable amount
+    uint256 private constant CLAIMABLE_TOKEN = 100 * 10 ** 18; // fixed initial claimable amount
     uint256 private constant DEFAULT_STORAGE_WINDOW = 15; // dyanmic with default values
-    uint256 private constant DEFAULT_PRICE = 1 * 10 * 18; // 1 DTOK with 18 decimals
+    uint256 private constant DEFAULT_PRICE = 1 * 10 ** 18; // 1 DTOK with 18 decimals
     uint256 public _tokenPrice = 100 wei;
 
     // Mapping
@@ -61,12 +61,11 @@ contract DeTok {
     // Registered De-Tok user can claim 100 DTOK Tokens
     function claimToken() public payable checkClaimed(msg.sender) {
         _claimedAddress[msg.sender] = true;
-        _dtok.transfer(msg.sender, CLAIMABLE_TOKEN);
+        _dtok.mint(msg.sender, CLAIMABLE_TOKEN);
     }
 
     // Mint Video
     function mintVideo(
-        uint8 videoType,
         string memory uri,
         string memory cid,
         bool payableVideo_
@@ -85,14 +84,8 @@ contract DeTok {
         );
 
         // Storing mapping
-
-        if (videoType == 0) {
-            _basicVideos[videoId] = videoRecord;
-            _videoType[videoId] = VideoType.BASIC;
-        } else {
-            _trendingVideos[videoId] = videoRecord;
-            _videoType[videoId] = VideoType.TRENDING;
-        }
+        _basicVideos[videoId] = videoRecord;
+        _videoType[videoId] = VideoType.BASIC;
 
         uint256 currentIndex = _videoCounter[msg.sender]; // moving index
         _videoOwners[msg.sender][currentIndex] = videoId; // adding video id to msg sender
@@ -102,7 +95,8 @@ contract DeTok {
     }
 
     // Track view counter and change basic to trending - current threshold is set at 10
-    function viewVideo(uint256 videoId) public payable checkExist(videoId) {
+    function viewVideo(uint256 videoId) public payable {
+        require(checkExist(videoId), "Video does not Exist");
         if (_videoType[videoId] == VideoType.BASIC) {
             _basicVideos[videoId].views += 1;
             if (_basicVideos[videoId].views > TRENDING_VIEWS_THRESHOLD) {
@@ -117,55 +111,19 @@ contract DeTok {
         _trendingVideos[videoId].views += 1;
     }
 
-    // function setPayableVideo(videoId) onlyVideoOwner() public {
-
-    // }
-
-    // function setPayableThreshold(uint256 videoId, uint256 payableThreshold) public {}
-
-    // function fundedView(uint256 tokenId) public payable returns (VideoRecord memory) {
-    //     require(
-    //         s_tokenToVideoRecords[tokenId].videoType == VideoType.FUNDED,
-    //         "pls check again the video"
-    //     );
-
-    //     // make payment from author account to smart contract
-    //     s_tokens.transferFrom(s_tokenToVideoRecords[tokenId].owner, address(this), 1);
-    //     s_tokenToVideoRecords[tokenId].views = s_tokenToVideoRecords[tokenId].views + 1;
-    //     return s_tokenToVideoRecords[tokenId];
-    // }
-
-    // function getFundBalance() public view returns (uint256) {
-    //     return s_ownerAvailableFunds[msg.sender];
-    // }
-
-    // function getOwnerCollection() public view returns (VideoRecord[] memory) {
-    //     return s_ownerVideoRecords[msg.sender];
-    // }
-
-    // function getFreeVideos() public view returns (VideoRecord[] memory) {
-    //     uint256 freeVideoCount = 0;
-    //     VideoRecord[] memory tmp = new VideoRecord[](s_videoCollection.length);
-
-    //     // create a list of free
-    //     for (uint256 tokenIndex = 1; tokenIndex <= s_videoCollection.length; tokenIndex++) {
-    //         if (s_videoCollection[tokenIndex].videoType == VideoType.FREE) {
-    //             tmp[freeVideoCount] = s_videoCollection[tokenIndex];
-    //             freeVideoCount += 1;
-    //         }
-    //     }
-
-    //     // return only free videos
-    //     VideoRecord[] memory freeVideos = new VideoRecord[](freeVideoCount);
-    //     for (uint256 i = 0; i < freeVideoCount; i++) {
-    //         freeVideos[i] = tmp[i];
-    //     }
-    //     return freeVideos;
-    // }
-
     // helpers
 
-    function setPayableVideo(uint256 videoId) public checkExist(videoId) {
+    function setPayableThreshold(uint256 videoId, uint256 amount) public {
+        require(checkExist(videoId), "Video does not Exist");
+        if (_videoType[videoId] == VideoType.BASIC) {
+            _basicVideos[videoId].payableThreshold = amount;
+        } else {
+            _trendingVideos[videoId].payableThreshold = amount;
+        }
+    }
+
+    function setPayableVideo(uint256 videoId) public {
+        require(checkExist(videoId), "Video does not Exist");
         if (_videoType[videoId] == VideoType.BASIC) {
             _basicVideos[videoId].payableVideo = true;
         } else {
@@ -173,7 +131,8 @@ contract DeTok {
         }
     }
 
-    function unSetPayableVideo(uint256 videoId) public checkExist(videoId) {
+    function unSetPayableVideo(uint256 videoId) public  {
+        require(checkExist(videoId), "Video does not Exist");
         if (_videoType[videoId] == VideoType.BASIC) {
             _basicVideos[videoId].payableVideo = false;
         } else {
@@ -184,9 +143,9 @@ contract DeTok {
     // soft delete of video
     function deleteVideo(uint256 videoId)
         public
-        checkExist(videoId)
         isVideoOwner(msg.sender, videoId)
-    {
+    {   
+        require(checkExist(videoId), "Video does not Exist");
         if (_videoType[videoId] == VideoType.TRENDING) {
             _trendingVideos[videoId].exist = false;
         } else {
@@ -200,11 +159,9 @@ contract DeTok {
     }
 
     function buy(uint256 _numberOfTokens) public payable {
-        require(msg.value == multiply(_numberOfTokens, _tokenPrice), "insufficient msg value");
-        require(_dtok.balanceOf(msg.sender) >= _numberOfTokens, "insufficient balance");
-        require(_dtok.transfer(msg.sender, _numberOfTokens), "transfer fail");
-
-        // emit event on transfer
+        require(msg.value >= _numberOfTokens * _tokenPrice, "Insufficient Value");
+        _owner.transfer(msg.value);
+        _dtok.mint(msg.sender, _numberOfTokens);
     }
 
     // getters
@@ -251,7 +208,8 @@ contract DeTok {
         return ret;
     }
 
-    function getViews(uint256 videoId) public view checkExist(videoId) returns (uint256) {
+    function getViews(uint256 videoId) public view returns (uint256) {
+        require(_basicVideos[videoId].exist || _trendingVideos[videoId].exist, "Video does not Exist");
         if (_videoType[videoId] == VideoType.BASIC) {
             return _basicVideos[videoId].views;
         } else {
@@ -259,16 +217,20 @@ contract DeTok {
         }
     }
 
-    function getExist(uint256 videoId) public view checkExist(videoId) returns (bool) {
-        return true;
-    }
-
-    function getPayableVideo(uint256 videoId) public view checkExist(videoId) returns (bool) {
+    function getPayableVideo(uint256 videoId) public view returns (bool) {
+        require(_basicVideos[videoId].exist || _trendingVideos[videoId].exist, "Video does not Exist");
         if (_videoType[videoId] == VideoType.BASIC) {
             return _basicVideos[videoId].payableVideo;
         } else {
             return _trendingVideos[videoId].payableVideo;
         }
+    }
+
+    function checkExist(uint256 videoId) public view returns (bool) {
+        if (_basicVideos[videoId].exist || _trendingVideos[videoId].exist) {
+            return true;
+        }
+        return false;
     }
 
     // modifiers
@@ -295,15 +257,6 @@ contract DeTok {
 
     modifier checkClaimed(address address_) {
         require(_claimedAddress[address_] == false, "You have already claimed DTOK.");
-        _;
-    }
-
-    modifier checkExist(uint256 videoId) {
-        bool check;
-        if (_basicVideos[videoId].exist || _trendingVideos[videoId].exist) {
-            check = true;
-        }
-        require(check, "This video does not exist.");
         _;
     }
 
