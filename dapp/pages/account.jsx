@@ -39,7 +39,6 @@ export default function Account() {
       console.log(videos);
      /* if (videos > 0) {
         sethasVideos(true);
-        notify("You are a DAO member :D");
       } else {
         notify("Please upload videos");
       }*/
