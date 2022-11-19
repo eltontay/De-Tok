@@ -20,7 +20,6 @@ export default function Account() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [hasVideos, sethasVideos] = useState(false);
-  const [isOwner, setIsOwner] = useState(false);
 
   const provider = useProvider();
   const { data: signer } = useSigner();
@@ -32,6 +31,8 @@ export default function Account() {
     signerOrProvider: signer || provider,
   });
 
+  console.log(DETOK_contract)
+  
   const check = async () => {
     try {
       setLoading(true);
@@ -49,25 +50,12 @@ export default function Account() {
     }
   };
 
-  /// to check if the user is the owner or not
-  const checkOwner = () => {
-    if (address == OwnerAddress) {
-      setIsOwner(true);
-      console.log("Owner Verified");
-      notify("Owner Verified");
-    } else {
-      setIsOwner(false);
-      console.log("You are not the Owner");
-      notify("You are not the Owner");
-    }
-  };
 
   useEffect(() => {
     if (!isConnected) {
       notify("Connect your wallet first");
     } else {
       check();
-      checkOwner();
     }
   }, []);
 
