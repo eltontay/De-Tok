@@ -165,6 +165,22 @@ contract DeTok {
 
     // helpers
 
+    function setPayableVideo(uint256 videoId) public checkExist(videoId) {
+        if (_videoType[videoId] == VideoType.BASIC) {
+            _basicVideos[videoId].payableVideo = true;
+        } else {
+            _trendingVideos[videoId].payableVideo = true;
+        }
+    }
+
+    function unSetPayableVideo(uint256 videoId) public checkExist(videoId) {
+        if (_videoType[videoId] == VideoType.BASIC) {
+            _basicVideos[videoId].payableVideo = false;
+        } else {
+            _trendingVideos[videoId].payableVideo = false;
+        }
+    }
+
     // soft delete of video
     function deleteVideo(uint256 videoId)
         public
@@ -233,6 +249,26 @@ contract DeTok {
             }
         }
         return ret;
+    }
+
+    function getViews(uint256 videoId) public view checkExist(videoId) returns (uint256) {
+        if (_videoType[videoId] == VideoType.BASIC) {
+            return _basicVideos[videoId].views;
+        } else {
+            return _trendingVideos[videoId].views;
+        }
+    }
+
+    function getExist(uint256 videoId) public view checkExist(videoId) returns (bool) {
+        return true;
+    }
+
+    function getPayableVideo(uint256 videoId) public view checkExist(videoId) returns (bool) {
+        if (_videoType[videoId] == VideoType.BASIC) {
+            return _basicVideos[videoId].payableVideo;
+        } else {
+            return _trendingVideos[videoId].payableVideo;
+        }
     }
 
     // modifiers
