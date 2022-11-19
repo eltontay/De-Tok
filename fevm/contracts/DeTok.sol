@@ -19,9 +19,9 @@ contract DeTok {
 
     // Constants
     uint256 private constant TRENDING_VIEWS_THRESHOLD = 10; // dynamic with default value, setting to 10 for testing purposes
-    uint256 private constant CLAIMABLE_TOKEN = 100 * 10 ** 18; // fixed initial claimable amount
+    uint256 private constant CLAIMABLE_TOKEN = 100 * 10**18; // fixed initial claimable amount
     uint256 private constant DEFAULT_STORAGE_WINDOW = 15; // dyanmic with default values
-    uint256 private constant DEFAULT_PRICE = 1 * 10 ** 18; // 1 DTOK with 18 decimals
+    uint256 private constant DEFAULT_PRICE = 1 * 10**18; // 1 DTOK with 18 decimals
     uint256 public _tokenPrice = 100 wei;
 
     // Mapping
@@ -131,7 +131,7 @@ contract DeTok {
         }
     }
 
-    function unSetPayableVideo(uint256 videoId) public  {
+    function unSetPayableVideo(uint256 videoId) public {
         require(checkExist(videoId), "Video does not Exist");
         if (_videoType[videoId] == VideoType.BASIC) {
             _basicVideos[videoId].payableVideo = false;
@@ -141,10 +141,7 @@ contract DeTok {
     }
 
     // soft delete of video
-    function deleteVideo(uint256 videoId)
-        public
-        isVideoOwner(msg.sender, videoId)
-    {   
+    function deleteVideo(uint256 videoId) public isVideoOwner(msg.sender, videoId) {
         require(checkExist(videoId), "Video does not Exist");
         if (_videoType[videoId] == VideoType.TRENDING) {
             _trendingVideos[videoId].exist = false;
@@ -208,8 +205,25 @@ contract DeTok {
         return ret;
     }
 
+    function getAllCid() public view returns (string[] memory) {
+        string[] memory ret = new string[](_videoIdCounter.current());
+        for (uint256 i = 0; i < _videoIdCounter.current(); i++) {
+            if (checkExist(i)) {
+                if (_videoType[i] == VideoType.BASIC) {
+                    ret[i] = _basicVideos[i].cid;
+                } else {
+                    ret[i] = _trendingVideos[i].cid;
+                }
+            }
+        }
+        return ret;
+    }
+
     function getViews(uint256 videoId) public view returns (uint256) {
-        require(_basicVideos[videoId].exist || _trendingVideos[videoId].exist, "Video does not Exist");
+        require(
+            _basicVideos[videoId].exist || _trendingVideos[videoId].exist,
+            "Video does not Exist"
+        );
         if (_videoType[videoId] == VideoType.BASIC) {
             return _basicVideos[videoId].views;
         } else {
@@ -218,7 +232,10 @@ contract DeTok {
     }
 
     function getPayableVideo(uint256 videoId) public view returns (bool) {
-        require(_basicVideos[videoId].exist || _trendingVideos[videoId].exist, "Video does not Exist");
+        require(
+            _basicVideos[videoId].exist || _trendingVideos[videoId].exist,
+            "Video does not Exist"
+        );
         if (_videoType[videoId] == VideoType.BASIC) {
             return _basicVideos[videoId].payableVideo;
         } else {
