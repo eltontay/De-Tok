@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import styles from "../styles/Account.module.css";
+import VideoGallery from "../components/VideoGallery";
 
 export default function Account() {
     return (
@@ -19,6 +20,7 @@ export default function Account() {
                   <span className={`${styles.titleWord} ${styles.word2}`}>
                     My Videos
                   </span>
+                  <VideoGallery/>
                 </div>
           </main>
         </>

@@ -1,0 +1,14 @@
+.mediaGrid > div {
+  display: flex;
+  flex-flow: wrap;
+}
+
+.mediaItem {
+  border: 1px solid #000;
+  padding: 6px;
+  display: flex;
+}
+.mediaItemImg {
+  width: 200px;
+  object-fit: cover;
+}

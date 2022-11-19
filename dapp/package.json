@@ -14,7 +14,10 @@
     "next": "13.0.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "wagmi": "^0.8.5"
+    "wagmi": "^0.8.5",
+    "@videojs/themes": "^1.0.1",
+    "lightgallery": "^2.7.0",
+    "video.js": "^7.20.3"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.13",
