@@ -11,33 +11,34 @@ contract DeTok is Ownable {
 
     Counters.Counter private _videoIdCounter;
 
-    // 3 Video Types
+    // 2 Video Types, values are 0 and 1 respectively
     enum VideoType {
         BASIC,
         TRENDING
     }
 
     // Constants
-    uint256 private constant BASIC_VIEWS_THRESHOLD = 100; // dyanmic with default values
-    uint256 private constant TRENDING_VIEWS_THRESHOLD = 1000000; // dynamic with default values
+    uint256 private constant TRENDING_VIEWS_THRESHOLD = 10; // dynamic with default value, setting to 10 for testing purposes
     uint256 private constant CLAIMABLE_TOKEN = 100; // fixed initial claimable amount
     uint256 private constant DEFAULT_STORAGE_WINDOW = 15; // dyanmic with default values
+    uint256 private constant DEFAULT_PRICE = 1 * 10 * 18; // 1 DTOK with 18 decimals
 
     // Mapping
+    mapping(uint256 => VideoType) private _videoType; // video id to video type
     mapping(uint256 => VideoRecord) private _basicVideos; // basic video collection
     mapping(uint256 => VideoRecord) private _trendingVideos; // trendy video collection
-    mapping(address => VideoRecord[]) private _ownerBasicVideos; // owner basic video collection
-    mapping(address => VideoRecord[]) private _ownerTrendingVideos; // owner trend video collection
+    mapping(address => uint256) private _videoCounter; // counter for number of videos for each video owner
+    mapping(address => mapping(uint256 => uint256)) private _videoOwners; // owner to index to video ids
     mapping(address => bool) private _claimedAddress; // track claimed tokens to address
 
     // Video Record Structure
     struct VideoRecord {
         address owner;
-        uint256 videoId;
         string cid;
         uint256 views;
         bool exist;
-        VideoType videoType;
+        bool payableVideo;
+        uint256 payableThreshold;
     }
 
     struct Users {
@@ -47,10 +48,12 @@ contract DeTok is Ownable {
 
     DTok private _dtok; // DTok ERC20 Token
     DVid private _dvid; // DVid ERC721 Token
+    address payable private immutable _owner; // owner of DeTok
 
     constructor(DTok dtok_, DVid dvid_) {
         _dtok = dtok_;
         _dvid = dvid_;
+        _owner = payable(_msgSender());
     }
 
     // Registered De-Tok user can claim 100 DTOK Tokens
@@ -59,62 +62,55 @@ contract DeTok is Ownable {
         _dtok.transfer(msg.sender, CLAIMABLE_TOKEN);
     }
 
-    // Mint Video in
+    // Mint Video
     function mintVideo(
-        VideoType videoType,
+        uint8 videoType,
         string memory uri,
         string memory cid
     ) public returns (uint256 videoId) {
         videoId = _videoIdCounter.current();
-        _videoIdCounter.increment();
         _dvid.safeMint(msg.sender, videoId, uri);
 
         // Create Video record
-        VideoRecord memory videoRecord = VideoRecord(msg.sender, videoId, cid, 0, false, videoType);
+        VideoRecord memory videoRecord = VideoRecord(msg.sender, cid, 0, true, false, 1000000);
 
         // Storing mapping
-        if (videoType == VideoType.BASIC) {
+
+        if (videoType == 0) {
             _basicVideos[videoId] = videoRecord;
-            _ownerBasicVideos[msg.sender].push(videoRecord);
+            _videoType[videoId] = VideoType.BASIC;
         } else {
             _trendingVideos[videoId] = videoRecord;
-            _ownerTrendingVideos[msg.sender].push(videoRecord);
+            _videoType[videoId] = VideoType.TRENDING;
         }
+
+        uint256 currentIndex = _videoCounter[msg.sender]; // moving index
+        _videoOwners[msg.sender][currentIndex] = videoId; // adding video id to msg sender
+        _videoIdCounter.increment();
+        _videoCounter[msg.sender] = _videoIdCounter.current(); // increment moving index
     }
 
-    // // Viewing functions
-    // function freeView(uint256 tokenId) public returns (VideoRecord memory) {
-    //     require(
-    //         s_tokenToVideoRecords[tokenId].videoType == VideoType.FREE,
-    //         "Sorry, it is not a free video"
-    //     );
-    //     s_tokenToVideoRecords[tokenId].views = s_tokenToVideoRecords[tokenId].views + 1;
+    // Track view counter and change basic to trending - current threshold is set at 10
+    function viewVideo(uint256 videoId) public payable checkExist(videoId) {
+        if (_videoType[videoId] == VideoType.BASIC) {
+            _basicVideos[videoId].views += 1;
+            if (_basicVideos[videoId].views > TRENDING_VIEWS_THRESHOLD) {
+                _videoType[videoId] = VideoType.TRENDING; // changing enum type
+                _trendingVideos[videoId] = _basicVideos[videoId]; // moving from basic to trending
+                _basicVideos[videoId].exist = false; // soft delete
+            }
+            return;
+        }
+        address payable videoOwner = payable(_trendingVideos[videoId].owner);
+        _dtok.transferFrom(_msgSender(), videoOwner, DEFAULT_PRICE); // Error will throw if insufficient funds
+        _trendingVideos[videoId].views += 1;
+    }
 
-    //     if (s_tokenToVideoRecords[tokenId].views > BASIC_VIEWS_THRESHOLD) {
-    //         // if it was free, now it is going to be paid one
-    //         s_tokenToVideoRecords[tokenId].videoType = VideoType.PAID;
-    //     }
+    // function setPayableVideo(videoId) onlyVideoOwner() public {
 
-    //     return s_tokenToVideoRecords[tokenId];
     // }
 
-    // function payAndView(uint256 tokenId) public payable returns (VideoRecord memory) {
-    //     require(
-    //         s_tokenToVideoRecords[tokenId].videoType == VideoType.PAID,
-    //         "pls check again the video"
-    //     );
-
-    //     // make payment
-    //     (bool sent, ) = address(this).call{value: msg.value}("");
-    //     require(sent, "Failed to pay, dont you have enough balance");
-    //     s_tokenToVideoRecords[tokenId].views = s_tokenToVideoRecords[tokenId].views + 1;
-
-    //     if (s_tokenToVideoRecords[tokenId].views > BASIC_VIEWS_THRESHOLD) {
-    //         // if it was free, now it is going to be paid one
-    //         s_tokenToVideoRecords[tokenId].videoType = VideoType.PAID;
-    //     }
-    //     return s_tokenToVideoRecords[tokenId];
-    // }
+    // function setPayableThreshold(uint256 videoId, uint256 payableThreshold) public {}
 
     // function fundedView(uint256 tokenId) public payable returns (VideoRecord memory) {
     //     require(
@@ -156,53 +152,69 @@ contract DeTok is Ownable {
     //     return freeVideos;
     // }
 
-    // function getFundedVideos() public view returns (VideoRecord[] memory) {
-    //     uint256 fundedVideoCount = 0;
-    //     VideoRecord[] memory tmp = new VideoRecord[](s_videoCollection.length);
+    // helpers
 
-    //     // create a list of Funded
-    //     for (uint256 tokenIndex = 1; tokenIndex <= s_videoCollection.length; tokenIndex++) {
-    //         if (s_videoCollection[tokenIndex].videoType == VideoType.FUNDED) {
-    //             tmp[fundedVideoCount] = s_videoCollection[tokenIndex];
-    //             fundedVideoCount += 1;
-    //         }
-    //     }
+    // soft delete of video
+    function deleteVideo(uint256 videoId)
+        public
+        checkExist(videoId)
+        isVideoOwner(msg.sender, videoId)
+    {
+        if (_videoType[videoId] == VideoType.TRENDING) {
+            _trendingVideos[videoId].exist = false;
+        } else {
+            _basicVideos[videoId].exist = false;
+        }
+    }
 
-    //     // return only Funded videos
-    //     VideoRecord[] memory fundedVideos = new VideoRecord[](fundedVideoCount);
-    //     for (uint256 i = 0; i < fundedVideoCount; i++) {
-    //         fundedVideos[i] = tmp[i];
-    //     }
-    //     return fundedVideos;
-    // }
+    // getters
 
-    // function getPayToViewVideos() public view returns (VideoRecord[] memory) {
-    //     uint256 paidVideoCount = 0;
-    //     VideoRecord[] memory tmp = new VideoRecord[](s_videoCollection.length);
+    // get all videos from owner
+    function getVideosOfOwner(address address_) public {}
 
-    //     // create a list of Funded
-    //     for (uint256 tokenIndex = 1; tokenIndex <= s_videoCollection.length; tokenIndex++) {
-    //         if (s_videoCollection[tokenIndex].videoType == VideoType.PAID) {
-    //             tmp[paidVideoCount] = s_videoCollection[tokenIndex];
-    //             paidVideoCount += 1;
-    //         }
-    //     }
+    // modifiers
 
-    //     // return only Funded videos
-    //     VideoRecord[] memory paidVideos = new VideoRecord[](paidVideoCount);
-    //     for (uint256 i = 0; i < paidVideoCount; i++) {
-    //         paidVideos[i] = tmp[i];
-    //     }
-    //     return paidVideos;
-    // }
+    modifier isVideoOwner(address address_, uint256 videoId) {
+        bool check;
+        if (_videoType[videoId] == VideoType.BASIC) {
+            if (_basicVideos[videoId].owner == address_) {
+                check = true;
+            }
+        } else if (_videoType[videoId] == VideoType.TRENDING) {
+            if (_trendingVideos[videoId].owner == address_) {
+                check = true;
+            }
+        } else {
+            if (address_ == _owner) {
+                check = true;
+            }
+        }
 
-    modifier checkClaimed(address _address) {
-        require(_claimedAddress[_address] == false, "You have already claimed");
+        require(check, "You are not the video owner.");
+        _;
+    }
+
+    modifier checkClaimed(address address_) {
+        require(_claimedAddress[address_] == false, "You have already claimed DTOK.");
+        _;
+    }
+
+    modifier checkExist(uint256 videoId) {
+        bool check;
+        if (_basicVideos[videoId].exist || _trendingVideos[videoId].exist) {
+            check = true;
+        }
+        require(check, "This video does not exist.");
+        _;
+    }
+
+    modifier checkTrending(uint256 videoId) {
+        require(_videoType[videoId] == VideoType.TRENDING, "This video is Basic.");
         _;
     }
 
     modifier checkBasic(uint256 videoId) {
-        require(_basicVideos[videoId].exist, "This is not a basic video");
+        require(_videoType[videoId] == VideoType.BASIC, "This video is Trending!");
         _;
     }
 }
