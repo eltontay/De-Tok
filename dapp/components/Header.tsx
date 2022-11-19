@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "../styles/Header.module.css";
 import Image from "next/image";
 import Link from "next/link";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export const Header = ({}) => {
   const [isActive, setIsActive] = useState(false);
@@ -47,8 +48,7 @@ export const Header = ({}) => {
             </Link>
           </li>
           <li className={styles.navitem}>
-            {/* <ConnectButton /> */}
-            <button>Connect</button>
+            <ConnectButton />
           </li>
         </ul>
         <button

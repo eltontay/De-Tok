@@ -4,7 +4,7 @@ import Image from "next/image";
 // import github from "../assets/github.svg";
 // import logo from "../assets/logo1.png";
 
-export default function Footer() {
+export const Footer = () => {
   return (
     <>
       <footer className={styles.footer}>
@@ -25,4 +25,4 @@ export default function Footer() {
       </footer>
     </>
   );
-}
+};

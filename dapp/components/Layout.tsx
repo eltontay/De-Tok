@@ -4,11 +4,11 @@ import React from "react";
 // import video from "../assets/video.png";
 // import Image from "next/image";
 // import Link from "next/link";
-import Footer from "./Footer";
+import { Footer } from "./Footer";
 import { Header } from "./Header";
 // import { ConnectButton } from "@rainbow-me/rainbowkit";
 
-export default function Layout({ children }) {
+export const Layout = ({ children }) => {
   return (
     <>
       <Header />
@@ -16,4 +16,4 @@ export default function Layout({ children }) {
       <Footer />
     </>
   );
-}
+};
