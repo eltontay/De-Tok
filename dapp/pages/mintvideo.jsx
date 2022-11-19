@@ -44,6 +44,7 @@ export default function MintVideo() {
   const [description, setDescription] = useState("");
   const [author, setAuthor] = useState("");
   const [video, setVideo] = useState();
+  const [payable, setPayable] = useState(false);
 
   const onSubmit = async () => {
     if (!video) {
@@ -136,6 +137,19 @@ export default function MintVideo() {
               </div>
             )}
           </label>
+          <label className="w-full font-bold pt-6">
+            {/* <div className="">Payable</div> */}
+            <input
+              type="checkbox"
+              value={payable}
+              className="w-4 h-4"
+              onChange={() => {
+                setPayable(!payable);
+              }}
+            />
+            <span className="pl-2">Payable</span>
+          </label>
+
           <div className="pt-6">
             <button
               className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
