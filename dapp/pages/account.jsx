@@ -13,8 +13,6 @@ import {
   DeTok_Contract_Address  
 } from "../constants/constants";
 
-console.log()
-
 export default function Account() {
   const notify = (message) => toast(`${message}`);
   const [loading, setLoading] = useState(false);
@@ -24,6 +22,10 @@ export default function Account() {
   const provider = useProvider();
   const { data: signer } = useSigner();
   const { address, isConnected } = useAccount();
+
+  console.log(provider);
+  console.log(address);
+  console.log(isConnected);
 
   const DETOK_contract = useContract({
     addressOrName: DeTok_Contract_Address,

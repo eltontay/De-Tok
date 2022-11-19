@@ -1,7 +1,7 @@
 export const OwnerAddress = "0x9680A866299a8D021114Ac6A460Ba8e5860B68Fb";
-export const DTok_Contract_Address = "0xAb8C95c7Ca1B55d9998E9D4084a08edB7d2E2463";
-export const DVid_Contract_Address = "0xC1cDCF9251bCB7B226853B5D38E3011c7cc4c970";
-export const DeTok_Contract_Address ="0xf4A7F88b4FE80672C757153aCa47e7102DABDeA0";
+export const DTok_Contract_Address = "0x20445e4711A55419bc7c35030D404973eD643BC4";
+export const DVid_Contract_Address = "0xE482bbB0d6dd5dEEC2B937cFe91B07561847AAA7";
+export const DeTok_Contract_Address ="0x837949241023C0bd743633bF20e06ef83A6a793E";
 
 export const DTOK_ABI =[
 	{
