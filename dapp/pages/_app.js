@@ -16,7 +16,7 @@ const wallabyTestnet = {
   nativeCurrency: { name: "tFIL", symbol: "FIL", decimals: 18 },
   /** Collection of RPC endpoints */
   rpcUrls: {
-    default: "https://aurora-testnet.infura.io/v3",
+    default: "https://wallaby.node.glif.io/rpc/v0",
   },
   blockExplorers: {
     default: "https://explorer.glif.io/wallaby",
