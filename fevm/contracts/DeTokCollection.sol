@@ -15,12 +15,12 @@ contract DeTokCollection is Ownable {
     enum VideoType {
         FREE,  // Any one can view
         PAID,  // Pay and view
-        FUNDED // Funded by the owner to view
+        FUNDED // Funded by the owner to view. free for user
     }
 
     enum Category {
         BASIC,
-        MASTER 
+        TRENDING 
     }
 
     struct VideoRecord {
@@ -38,7 +38,7 @@ contract DeTokCollection is Ownable {
 
     // Constants
     uint constant BASIC_VIEWS = 100;
-    uint constant MASTER_VIEWS = 1000000;
+    uint constant TRENDING_VIEWS = 1000;
     uint constant CLAIMABLE_TOKEN = 100;   
     uint constant DEFAULT_STORAGE_WINDOW = 15;   
 
@@ -60,9 +60,6 @@ contract DeTokCollection is Ownable {
 
     // Viewer permissioned Media records
     mapping(address=>VideoRecord[]) private s_viewerPermissionedVideoRecords;
-
-    // Available funds
-    mapping(address=>uint256) private s_ownerAvailableFunds;
 
     // free erc20 tokens claimed - tracking
     mapping(address=>bool) private s_claimedTokens;  
@@ -111,8 +108,6 @@ contract DeTokCollection is Ownable {
            s_tokens.transferFrom(msg.sender, address(this), msg.value);
            (bool sent,) = address(this).call{value: msg.value}("");
            require(sent, "Failed to pay, dont you have enough balance");
-           // add prefund to existing funds 
-           s_ownerAvailableFunds[msg.sender] = s_ownerAvailableFunds[msg.sender] + msg.value;
         }
 
         // Create Video record
@@ -131,12 +126,21 @@ contract DeTokCollection is Ownable {
 
     // Viewing functions
     function freeView(uint256 tokenId) public returns (VideoRecord memory){
-        require(s_tokenToVideoRecords[tokenId].videoType == VideoType.FREE,"Sorry, it is not a free video");
+        bool isFree = s_tokenToVideoRecords[tokenId].videoType == VideoType.FREE;
+        bool isFunded = s_tokenToVideoRecords[tokenId].videoType == VideoType.FUNDED;
+
+        require(isFree || isFunded,"Sorry, it is not a free video");
         s_tokenToVideoRecords[tokenId].views =  s_tokenToVideoRecords[tokenId].views + 1;
 
         if(s_tokenToVideoRecords[tokenId].views > BASIC_VIEWS){
             // if it was free, now it is going to be paid one
-            s_tokenToVideoRecords[tokenId].videoType = VideoType.PAID;
+            if(s_tokenToVideoRecords[tokenId].videoType == VideoType.FREE){
+                s_tokenToVideoRecords[tokenId].videoType = VideoType.PAID;
+            }
+        }
+
+        if(s_tokenToVideoRecords[tokenId].views > TRENDING_VIEWS){
+            s_tokenToVideoRecords[tokenId].category = Category.TRENDING; 
         }
 
         return s_tokenToVideoRecords[tokenId];
@@ -166,72 +170,61 @@ contract DeTokCollection is Ownable {
         return s_tokenToVideoRecords[tokenId];
     }
 
+    function preFundDeposit() public payable {
+        // add prefund to existing funds 
+        require(s_tokens.balanceOf(msg.sender) > msg.value,"Insufficient balance");
+
+        // approve the amount of funds
+        s_tokens.approve(address(this),msg.value); 
+    }
+
     function getFundBalance() public view returns(uint256){
-        return s_ownerAvailableFunds[msg.sender];
+        return s_tokens.allowance(msg.sender, address(this));
     }
     
     function getOwnerCollection()public view returns(VideoRecord[] memory){
         return s_ownerVideoRecords[msg.sender];
     }
 
-    function getFreeVideos() public view returns(VideoRecord[] memory){
-       uint256 freeVideoCount = 0;
+    function getBasicVideos() public view returns(VideoRecord[] memory){
+       uint256 basicVideoCount = 0;
        VideoRecord[] memory tmp = new VideoRecord[](s_videoCollection.length);
 
        // create a list of free
        for(uint tokenIndex =1; tokenIndex <= s_videoCollection.length; tokenIndex++){
-          if(s_videoCollection[tokenIndex].videoType == VideoType.FREE){
-             tmp[freeVideoCount] = s_videoCollection[tokenIndex];
-             freeVideoCount +=1;
+          if(s_videoCollection[tokenIndex].category == Category.BASIC) 
+            {
+             tmp[basicVideoCount] = s_videoCollection[tokenIndex];
+             basicVideoCount +=1;
+          }
+       }
+
+       // return only basic videos 
+       VideoRecord[] memory basicVideos = new VideoRecord[](basicVideoCount);
+       for(uint i =0; i < basicVideoCount; i++){
+           basicVideos[i] = tmp[i];
+       }
+       return basicVideos;
+    }
+
+
+    function getTrendingVideos() public view returns(VideoRecord[] memory){
+        uint256 trendingVideoCount = 0;
+       VideoRecord[] memory tmp = new VideoRecord[](s_videoCollection.length);
+
+       // create a list of free
+       for(uint tokenIndex =1; tokenIndex <= s_videoCollection.length; tokenIndex++){
+           if(s_videoCollection[tokenIndex].category == Category.TRENDING){
+             tmp[trendingVideoCount] = s_videoCollection[tokenIndex];
+             trendingVideoCount +=1;
           }
        }
 
        // return only free videos 
-       VideoRecord[] memory freeVideos = new VideoRecord[](freeVideoCount);
-       for(uint i =0; i < freeVideoCount; i++){
-           freeVideos[i] = tmp[i];
+       VideoRecord[] memory trendingVideos = new VideoRecord[](trendingVideoCount);
+       for(uint i =0; i < trendingVideoCount; i++){
+           trendingVideos[i] = tmp[i];
        }
-       return freeVideos;
+       return trendingVideos;
     }
-
-    function getFundedVideos() public view returns(VideoRecord[] memory){
-       uint256 fundedVideoCount = 0;
-       VideoRecord[] memory tmp = new VideoRecord[](s_videoCollection.length);
-
-       // create a list of Funded
-       for(uint tokenIndex =1; tokenIndex <= s_videoCollection.length; tokenIndex++){
-          if(s_videoCollection[tokenIndex].videoType == VideoType.FUNDED){
-             tmp[fundedVideoCount] = s_videoCollection[tokenIndex];
-             fundedVideoCount +=1;
-          }
-       }
-
-       // return only Funded videos 
-       VideoRecord[] memory fundedVideos = new VideoRecord[](fundedVideoCount);
-       for(uint i =0; i < fundedVideoCount; i++){
-           fundedVideos[i] = tmp[i];
-       }
-       return fundedVideos;
-    }
-
-    function getPayToViewVideos() public view returns(VideoRecord[] memory){
-        uint256 paidVideoCount = 0;
-       VideoRecord[] memory tmp = new VideoRecord[](s_videoCollection.length);
-
-       // create a list of Funded
-       for(uint tokenIndex =1; tokenIndex <= s_videoCollection.length; tokenIndex++){
-          if(s_videoCollection[tokenIndex].videoType == VideoType.PAID){
-             tmp[paidVideoCount] = s_videoCollection[tokenIndex];
-             paidVideoCount +=1;
-          }
-       }
-
-       // return only Funded videos 
-       VideoRecord[] memory paidVideos = new VideoRecord[](paidVideoCount);
-       for(uint i =0; i < paidVideoCount; i++){
-           paidVideos[i] = tmp[i];
-       }
-       return paidVideos;
-    }
-
 }
