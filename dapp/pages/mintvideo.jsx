@@ -1,8 +1,10 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Head from "next/head";
 import styles from "../styles/MintVideo.module.css";
 import { useDropzone } from "react-dropzone";
 import { Web3Storage } from "web3.storage";
+import { useContractWrite, usePrepareContractWrite } from "wagmi";
+import { DETOK_ABI, DeTok_Contract_Address } from "../constants/constants";
 
 function makeStorageClient() {
   return new Web3Storage({ token: process.env.NEXT_PUBLIC_WEB3STORAGE_TOKEN });
@@ -44,6 +46,25 @@ export default function MintVideo() {
   const [description, setDescription] = useState("");
   const [author, setAuthor] = useState("");
   const [video, setVideo] = useState();
+  const [payable, setPayable] = useState(false);
+  const [cid, setCid] = useState();
+
+  const { config } = usePrepareContractWrite({
+    address: DeTok_Contract_Address,
+    abi: DETOK_ABI,
+    functionName: "mintVideo",
+    args: [`https://${cid}.ipfs.w3s.link/`, cid, payable],
+  });
+
+  const { data, isLoading, isSuccess, write } = useContractWrite(config);
+  // console.log(data, isLoading, isSuccess);
+
+  useEffect(() => {
+    if (cid) {
+      console.log("call contract");
+      write?.();
+    }
+  }, [cid]);
 
   const onSubmit = async () => {
     if (!video) {
@@ -54,11 +75,16 @@ export default function MintVideo() {
     console.log(jsonFile);
     console.log(video);
     const cid = await storeContent([video, jsonFile]);
+    console.log(cid);
+    setCid(cid);
+    // setCid("bafybeidtig7gruy5yirxjhbp675apd3qkrr6soawhh7bhpj7l4sdp7pawe");
   };
+
   const onDrop = useCallback(async (acceptedFiles) => {
     // const cid = await storeContent(acceptedFiles);
     setVideo(acceptedFiles[0]);
   }, []);
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     maxSize: 5242880, //5MB
@@ -126,6 +152,7 @@ export default function MintVideo() {
               <div
                 {...getRootProps()}
                 className="h-40 cursor-pointer border border-dashed border-white flex items-center justify-center"
+                onClick={(e) => e.stopPropagation()}
               >
                 <input {...getInputProps()} />
                 <div className="px-4">
@@ -136,6 +163,18 @@ export default function MintVideo() {
               </div>
             )}
           </label>
+          <label className="w-full font-bold pt-6">
+            <input
+              type="checkbox"
+              value={payable}
+              className="w-4 h-4"
+              onChange={() => {
+                setPayable(!payable);
+              }}
+            />
+            <span className="pl-2">Payable</span>
+          </label>
+
           <div className="pt-6">
             <button
               className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
