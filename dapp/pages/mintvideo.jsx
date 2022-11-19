@@ -59,8 +59,8 @@ export default function MintVideo() {
       </Head>
 
       <main className={styles.main}>
-        <div className="flex flex-col items-center h-full">
-          <div className="text-2xl pb-4">Mint a Video</div>
+        <div className="flex flex-col items-center h-full pt-10">
+          {/* <div className="text-2xl pb-4">Mint Video</div> */}
           <label className="w-full font-bold">
             Title
             <input
