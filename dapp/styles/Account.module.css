@@ -1,0 +1,68 @@
+.main {
+    padding-top: 6rem;
+    padding-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+    min-height: 92vh;
+  }
+  
+  .title {
+    font-weight: 300;
+    font-size: 30px;
+    margin: 10px;
+  }
+  
+  .titleWord {
+    animation: color-animation 4s linear infinite;
+  }
+  
+  .word1 {
+    --color-1: #080808;
+    --color-2: #080808;
+    --color-3: #080808;
+  }
+  
+  .word2 {
+    --color-1: #080808;
+    --color-2: #080808;
+    --color-3: #080808;
+  }
+   
+  @keyframes color-animation {
+    0% {
+      color: var(--color-1);
+    }
+    32% {
+      color: var(--color-1);
+    }
+    33% {
+      color: var(--color-2);
+    }
+    65% {
+      color: var(--color-2);
+    }
+    66% {
+      color: var(--color-3);
+    }
+    99% {
+      color: var(--color-3);
+    }
+    100% {
+      color: var(--color-1);
+    }
+  }
+  
+  .message {
+    text-align: center;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .title {
+      font-size: 22px;
+    }
+  }
+  

@@ -32,21 +32,20 @@ export const Header = ({}) => {
           }
         >
           <li className={styles.navitem}>
-            <Link className={styles.navlink} href="/masters">
-              Master Collection
+            <Link className={styles.navlink} href="/">
+              Home
             </Link>
           </li>
           <li className={styles.navitem}>
-            <Link className={styles.navlink} href="/dashboard">
-              My Account
+            <Link className={styles.navlink} href="/account">
+              Account
             </Link>
           </li>
           <li className={styles.navitem}>
-            <Link className={styles.navlink} href="/team">
-              Team
+            <Link className={styles.navlink} href="/mintvideo">
+              Mint Video
             </Link>
           </li>
-
           <li className={styles.navitem}>
             {/* <ConnectButton /> */}
             <button>Connect</button>
