@@ -11,7 +11,7 @@ export default function Home() {
           name="description"
           content="Viral videos live for long time, other die!"
         />
-        <Image src="./video.png" alt="De-Tok Logo" />
+        {/* <Image src="./video.png" alt="De-Tok Logo" width={20} height={20} /> */}
       </Head>
 
       <main className={styles.main}>

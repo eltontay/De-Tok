@@ -6,23 +6,26 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract DeTokVideo is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
+contract DVid is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     constructor() ERC721("DeTokVideo", "DVID") {}
 
-    function safeMint(address to, uint256 tokenId, string memory uri)
-        public
-        onlyOwner
-    {
+    function safeMint(
+        address to,
+        uint256 tokenId,
+        string memory uri
+    ) public onlyOwner {
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
     }
 
     // The following functions are overrides required by Solidity.
 
-    function _beforeTokenTransfer(address from, address to, uint256 tokenId, uint256 batchSize)
-        internal
-        override(ERC721, ERC721Enumerable)
-    {
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId,
+        uint256 batchSize
+    ) internal override(ERC721, ERC721Enumerable) {
         super._beforeTokenTransfer(from, to, tokenId, batchSize);
     }
 
