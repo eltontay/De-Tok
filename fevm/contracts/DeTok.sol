@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
-import "@openzeppelin/contracts/access/Ownable.sol";
+
 import "@openzeppelin/contracts/utils/Counters.sol";
 
 import "./DTok.sol";
 import "./DVid.sol";
 
-contract DeTok is Ownable {
+contract DeTok {
     using Counters for Counters.Counter;
 
     Counters.Counter private _videoIdCounter;
@@ -55,7 +55,7 @@ contract DeTok is Ownable {
     constructor(DTok dtok_, DVid dvid_) {
         _dtok = dtok_;
         _dvid = dvid_;
-        _owner = payable(_msgSender());
+        _owner = payable(msg.sender);
     }
 
     // Registered De-Tok user can claim 100 DTOK Tokens
@@ -74,31 +74,31 @@ contract DeTok is Ownable {
         videoId = _videoIdCounter.current();
         _dvid.safeMint(msg.sender, uri);
 
-        // // Create Video record
-        // VideoRecord memory videoRecord = VideoRecord(
-        //     msg.sender,
-        //     cid,
-        //     0,
-        //     true,
-        //     payableVideo_,
-        //     1000000
-        // );
+        // Create Video record
+        VideoRecord memory videoRecord = VideoRecord(
+            msg.sender,
+            cid,
+            0,
+            true,
+            payableVideo_,
+            1000000
+        );
 
-        // // Storing mapping
+        // Storing mapping
 
-        // if (videoType == 0) {
-        //     _basicVideos[videoId] = videoRecord;
-        //     _videoType[videoId] = VideoType.BASIC;
-        // } else {
-        //     _trendingVideos[videoId] = videoRecord;
-        //     _videoType[videoId] = VideoType.TRENDING;
-        // }
+        if (videoType == 0) {
+            _basicVideos[videoId] = videoRecord;
+            _videoType[videoId] = VideoType.BASIC;
+        } else {
+            _trendingVideos[videoId] = videoRecord;
+            _videoType[videoId] = VideoType.TRENDING;
+        }
 
-        // uint256 currentIndex = _videoCounter[msg.sender]; // moving index
-        // _videoOwners[msg.sender][currentIndex] = videoId; // adding video id to msg sender
-        // _videoIdCounter.increment();
-        // _videoCounter[msg.sender] = _videoIdCounter.current(); // increment moving index
-        // _trueCounter[msg.sender] += 1;
+        uint256 currentIndex = _videoCounter[msg.sender]; // moving index
+        _videoOwners[msg.sender][currentIndex] = videoId; // adding video id to msg sender
+        _videoIdCounter.increment();
+        _videoCounter[msg.sender] = _videoIdCounter.current(); // increment moving index
+        _trueCounter[msg.sender] += 1;
     }
 
     // Track view counter and change basic to trending - current threshold is set at 10
@@ -113,7 +113,7 @@ contract DeTok is Ownable {
             return;
         }
         address payable videoOwner = payable(_trendingVideos[videoId].owner);
-        _dtok.transferFrom(_msgSender(), videoOwner, DEFAULT_PRICE); // Error will throw if insufficient funds
+        _dtok.transferFrom(msg.sender, videoOwner, DEFAULT_PRICE); // Error will throw if insufficient funds
         _trendingVideos[videoId].views += 1;
     }
 
