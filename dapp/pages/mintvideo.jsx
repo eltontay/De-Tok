@@ -97,7 +97,7 @@ export default function MintVideo() {
               }}
             />
           </label>
-          <label className="w-full font-bold">
+          <label className="w-full font-bold pt-2">
             Video
             <div
               {...getRootProps()}
