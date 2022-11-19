@@ -3,13 +3,7 @@ import Head from "next/head";
 import styles from "../styles/MintVideo.module.css";
 import { useDropzone } from "react-dropzone";
 import { Web3Storage } from "web3.storage";
-import {
-  useAccount,
-  useContractWrite,
-  usePrepareContractWrite,
-  useProvider,
-  useSigner,
-} from "wagmi";
+import { useContractWrite, usePrepareContractWrite } from "wagmi";
 import { DETOK_ABI, DeTok_Contract_Address } from "../constants/constants";
 
 function makeStorageClient() {
@@ -59,14 +53,15 @@ export default function MintVideo() {
     address: DeTok_Contract_Address,
     abi: DETOK_ABI,
     functionName: "mintVideo",
-    args: ["uri", cid, payable],
+    args: [`https://${cid}.ipfs.w3s.link/`, cid, payable],
   });
 
   const { data, isLoading, isSuccess, write } = useContractWrite(config);
-  console.log(data, isLoading, isSuccess);
+  // console.log(data, isLoading, isSuccess);
 
   useEffect(() => {
     if (cid) {
+      console.log("call contract");
       write?.();
     }
   }, [cid]);
@@ -80,7 +75,9 @@ export default function MintVideo() {
     console.log(jsonFile);
     console.log(video);
     const cid = await storeContent([video, jsonFile]);
+    console.log(cid);
     setCid(cid);
+    // setCid("bafybeidtig7gruy5yirxjhbp675apd3qkrr6soawhh7bhpj7l4sdp7pawe");
   };
 
   const onDrop = useCallback(async (acceptedFiles) => {
