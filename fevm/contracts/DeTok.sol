@@ -22,12 +22,14 @@ contract DeTok is Ownable {
     uint256 private constant CLAIMABLE_TOKEN = 100; // fixed initial claimable amount
     uint256 private constant DEFAULT_STORAGE_WINDOW = 15; // dyanmic with default values
     uint256 private constant DEFAULT_PRICE = 1 * 10 * 18; // 1 DTOK with 18 decimals
+    uint256 public _tokenPrice = 100 wei;
 
     // Mapping
     mapping(uint256 => VideoType) private _videoType; // video id to video type
     mapping(uint256 => VideoRecord) private _basicVideos; // basic video collection
     mapping(uint256 => VideoRecord) private _trendingVideos; // trendy video collection
-    mapping(address => uint256) private _videoCounter; // counter for number of videos for each video owner
+    mapping(address => uint256) private _videoCounter; // counter for number of videos for each video owner for video id
+    mapping(address => uint256) private _trueCounter; // increases and decreases accordingly
     mapping(address => mapping(uint256 => uint256)) private _videoOwners; // owner to index to video ids
     mapping(address => bool) private _claimedAddress; // track claimed tokens to address
 
@@ -36,14 +38,14 @@ contract DeTok is Ownable {
         address owner;
         string cid;
         uint256 views;
-        bool exist;
+        bool exist; // soft delete
         bool payableVideo;
-        uint256 payableThreshold;
+        uint256 payableThreshold; // recommended value to 1,000,000
     }
 
     struct Users {
         address user;
-        string web3api;
+        // string web3api;
     }
 
     DTok private _dtok; // DTok ERC20 Token
@@ -66,28 +68,37 @@ contract DeTok is Ownable {
     function mintVideo(
         uint8 videoType,
         string memory uri,
-        string memory cid
+        string memory cid,
+        bool payableVideo_
     ) public returns (uint256 videoId) {
         videoId = _videoIdCounter.current();
-        _dvid.safeMint(msg.sender, videoId, uri);
+        _dvid.safeMint(msg.sender, uri);
 
-        // Create Video record
-        VideoRecord memory videoRecord = VideoRecord(msg.sender, cid, 0, true, false, 1000000);
+        // // Create Video record
+        // VideoRecord memory videoRecord = VideoRecord(
+        //     msg.sender,
+        //     cid,
+        //     0,
+        //     true,
+        //     payableVideo_,
+        //     1000000
+        // );
 
-        // Storing mapping
+        // // Storing mapping
 
-        if (videoType == 0) {
-            _basicVideos[videoId] = videoRecord;
-            _videoType[videoId] = VideoType.BASIC;
-        } else {
-            _trendingVideos[videoId] = videoRecord;
-            _videoType[videoId] = VideoType.TRENDING;
-        }
+        // if (videoType == 0) {
+        //     _basicVideos[videoId] = videoRecord;
+        //     _videoType[videoId] = VideoType.BASIC;
+        // } else {
+        //     _trendingVideos[videoId] = videoRecord;
+        //     _videoType[videoId] = VideoType.TRENDING;
+        // }
 
-        uint256 currentIndex = _videoCounter[msg.sender]; // moving index
-        _videoOwners[msg.sender][currentIndex] = videoId; // adding video id to msg sender
-        _videoIdCounter.increment();
-        _videoCounter[msg.sender] = _videoIdCounter.current(); // increment moving index
+        // uint256 currentIndex = _videoCounter[msg.sender]; // moving index
+        // _videoOwners[msg.sender][currentIndex] = videoId; // adding video id to msg sender
+        // _videoIdCounter.increment();
+        // _videoCounter[msg.sender] = _videoIdCounter.current(); // increment moving index
+        // _trueCounter[msg.sender] += 1;
     }
 
     // Track view counter and change basic to trending - current threshold is set at 10
@@ -165,12 +176,64 @@ contract DeTok is Ownable {
         } else {
             _basicVideos[videoId].exist = false;
         }
+        _trueCounter[msg.sender] -= 1;
+    }
+
+    function multiply(uint256 x, uint256 y) internal pure returns (uint256 z) {
+        require(y == 0 || (z = x * y) / y == x, "error");
+    }
+
+    function buy(uint256 _numberOfTokens) public payable {
+        require(msg.value == multiply(_numberOfTokens, _tokenPrice), "insufficient msg value");
+        require(_dtok.balanceOf(msg.sender) >= _numberOfTokens, "insufficient balance");
+        require(_dtok.transfer(msg.sender, _numberOfTokens), "transfer fail");
+
+        // emit event on transfer
     }
 
     // getters
 
-    // get all videos from owner
-    function getVideosOfOwner(address address_) public {}
+    // get all video ids from msg sender
+    function getAllVideoIdOfOwner() public view returns (uint256[] memory) {
+        uint256[] memory ret = new uint256[](_trueCounter[msg.sender]);
+        uint256 counter = 0;
+        for (uint256 i = 0; i < _videoCounter[msg.sender]; i++) {
+            uint256 videoId = _videoOwners[msg.sender][i];
+            if (_videoType[videoId] == VideoType.BASIC) {
+                if (_basicVideos[videoId].exist) {
+                    ret[counter] = videoId;
+                    counter += 1;
+                }
+            } else {
+                if (_trendingVideos[videoId].exist) {
+                    ret[counter] = videoId;
+                    counter += 1;
+                }
+            }
+        }
+        return ret;
+    }
+
+    // get all video cids from msg sender
+    function getAllVideoCidOfOwner() public view returns (string[] memory) {
+        string[] memory ret = new string[](_trueCounter[msg.sender]);
+        uint256 counter = 0;
+        for (uint256 i = 0; i < _videoCounter[msg.sender]; i++) {
+            uint256 videoId = _videoOwners[msg.sender][i];
+            if (_videoType[videoId] == VideoType.BASIC) {
+                if (_basicVideos[videoId].exist) {
+                    ret[counter] = _basicVideos[videoId].cid;
+                    counter += 1;
+                }
+            } else {
+                if (_trendingVideos[videoId].exist) {
+                    ret[counter] = _trendingVideos[videoId].cid;
+                    counter += 1;
+                }
+            }
+        }
+        return ret;
+    }
 
     // modifiers
 
