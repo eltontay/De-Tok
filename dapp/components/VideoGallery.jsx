@@ -37,8 +37,7 @@ export default function VideoGallery(cids) {
             vid.push(res);
           }
         }
-        console.log(vid);
-        // setInfo(vid);
+        //setInfo(vid);
       } catch (error) {
         console.log(error);
       }

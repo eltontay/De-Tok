@@ -59,7 +59,7 @@ export const TrendingVideos = () => {
       </div>
       <label>{videoIds}</label>
       <div>
-        <VideoGallery data={{ cids }}></VideoGallery>
+        <VideoGallery data={ videoIds }></VideoGallery>
       </div>
       <button
         className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow marign px-2"
