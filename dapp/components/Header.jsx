@@ -23,7 +23,7 @@ export const Header = ({}) => {
             </div>
           </Link>
           <div className={styles.navlogo}>
-            <Image color="red" src="/video.png" alt="De-Tok Logo" width={20} height={20} />
+            <Image src="/video.png" alt="De-Tok Logo" width={20} height={20} tintColor='red' />
           </div>
         </div>
         <ul

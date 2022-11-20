@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>De-Tok</title>
+        <title>De Tok</title>
         <meta
           name="description"
           content="Viral videos live for long time, other die!"
@@ -18,7 +18,7 @@ export default function Home() {
           <div>
             <div className={styles.title}>
               <span className={`${styles.titleWord} ${styles.word2}`}>
-                De-Tok
+                De Tok
               </span>
             </div>
             <div className={styles.tagline}>
