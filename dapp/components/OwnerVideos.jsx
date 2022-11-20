@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useAccount, useContractRead, useProvider, useSigner } from 'wagmi';
 import {
-  DeTOK_ABI,
+  DETOK_ABI,
   DeTok_Contract_Address
 } from '../constants/constants';
 
@@ -16,7 +16,7 @@ export const OwnerVideos = () => {
     const { refetch } = useContractRead(
       {
         address: DeTok_Contract_Address,
-        abi:DeTOK_ABI,
+        abi:DETOK_ABI,
         functionName: 'getAllVideoCIDOfOwner',
       },
     )

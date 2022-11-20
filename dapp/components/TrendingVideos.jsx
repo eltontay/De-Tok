@@ -4,7 +4,7 @@ import { useAccount, useContractRead, useProvider, useSigner } from 'wagmi';
 import styles from "../styles/TrendingVideos.module.css";
 
 import {
-  DeTOK_ABI,
+  DETOK_ABI,
   DeTok_Contract_Address
 } from '../constants/constants';
 
@@ -19,7 +19,7 @@ export const TrendingVideos = () => {
     const { refetch } = useContractRead(
       {
         address: DeTok_Contract_Address,
-        abi:DeTOK_ABI,
+        abi:DETOK_ABI,
         functionName: 'getAllTrendingCid',
       },
     )

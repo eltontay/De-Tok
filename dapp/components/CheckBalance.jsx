@@ -6,8 +6,6 @@ import { ClaimTokens  } from "./ClaimTokens";
 import {
   DTOK_ABI,
   DTok_Contract_Address,
-  DeTOK_ABI,
-  DeTok_Contract_Address
 } from '../constants/constants';
 
 
