@@ -1,5 +1,9 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useAccount, useContractRead, useProvider, useSigner } from 'wagmi';
+import styles from '../styles/BasicVideos.module.css';
+
+import VideoGallery from './VideoGallery';
+
 import {
   DETOK_ABI,
   DeTok_Contract_Address
@@ -19,7 +23,19 @@ export const OwnerVideos = () => {
         abi:DETOK_ABI,
         functionName: 'getAllVideoCIDOfOwner',
       },
-    )
+    );
+
+    useEffect(() => {
+      const fetchData = async () => {
+        const res = await refetch();
+        const { status, data } = res;
+        if (res.status == 'success') {
+          setVideoIds(data);
+        }
+        console.log(data);
+      };
+      fetchData();
+    }, [videoIds]);
     
     const handleClick = async () => {
       const res = await refetch();
@@ -31,8 +47,13 @@ export const OwnerVideos = () => {
 
     return (
       <div className="pt-2">
-          {videoIds}
-          <label>Replace with Owner video gallery</label>
+      <div className={styles.title}>
+        <span className={`${styles.title.description}`}>My Videos</span>
       </div>
-    )
+      <label>{videoIds}</label>
+      <div>
+        <VideoGallery data={ videoIds }></VideoGallery>
+      </div>
+    </div>
+    );
 }

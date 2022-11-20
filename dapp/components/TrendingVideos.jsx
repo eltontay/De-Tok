@@ -38,22 +38,8 @@ export const TrendingVideos = () => {
     fetchData();
   }, [videoIds]);
 
-  // useEffect(async () => {
-  //   const res = await refetch();
-
-  // });
-
-  // const handleClick = async () => {
-  //   const res = await refetch();
-  //   const { status, data} = res;
-  //   if(res.status == "success"){
-  //     setVideoIds(data);
-  //     setCids(["bafybeicq7qd5ns67yfnwfclhunwifsgqptcddvhdfklnz5deopa4apr4qu","bafybeigg6vuimb2rwgmc3pfcrvwrzgg5gxjd75z74avvwxeaz47gsmwyx4"] )
-  //   }
-  // }
-
   return (
-    <div className="pt-2">
+    <div className={styles.container}>
       <div className={styles.title}>
         <span className={`${styles.title.description}`}>Trending Videos</span>
       </div>
@@ -61,12 +47,6 @@ export const TrendingVideos = () => {
       <div>
         <VideoGallery data={ videoIds }></VideoGallery>
       </div>
-      <button
-        className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow marign px-2"
-        onClick={() => handleClick()}
-      >
-        test
-      </button>
     </div>
   );
 };

@@ -4,8 +4,8 @@
 }
 
 .mediaItem {
-  border: 1px solid #000;
-  padding: 6px;
+  border: 1px solid rgb(209, 204, 204);
+  padding: 3px;
   display: flex;
 }
 .mediaItemImg {

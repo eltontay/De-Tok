@@ -1,7 +1,15 @@
+.container{
+  max-width: 50vw;
+}
+
 .title{
-    margin: 3;
-    line-height: 0.75;
+    margin: 1;
+    line-height: 1.5;
     font-size: 1rem;
+    background-color: #e6d6d6ad;
+    margin: .5rem;
+    border-radius: 3px;
+    color: rgb(110, 12, 12);
 }
 
 .title,

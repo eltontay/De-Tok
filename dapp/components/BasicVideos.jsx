@@ -32,12 +32,13 @@ export const BasicVideos = () => {
   }, [videoIds]);
 
   return (
-    <div className="pt-2">
-      <div className="pt-2">
-        <div>
-          {/* {videoIds} */}
-          <VideoGallery data={videoIds}></VideoGallery>
-        </div>
+    <div className={styles.container}>
+      <div className={styles.title}>
+        <span className={`${styles.title.description}`}>Basic Videos</span>
+      </div>
+      <label>{videoIds}</label>
+      <div>
+        <VideoGallery data={ videoIds }></VideoGallery>
       </div>
     </div>
   );
