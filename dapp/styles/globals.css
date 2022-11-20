@@ -26,5 +26,6 @@ a {
   body {
     color: white;
     background: black;
+    background-image: url('/bg-img.jpeg');
   }
 }

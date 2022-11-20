@@ -1,9 +1,8 @@
 .navbar {
   z-index: 1000;
   /* border-bottom: 1px solid #b1bdf8; */
-  background: #ffcfa8;
-  background: #fabcbc;
-  background: #e6d6d6ad;
+  background: black;
+
   backdrop-filter: blur(6px);  
   
   position: fixed;
@@ -43,7 +42,6 @@
   margin: 5px auto;
   -webkit-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
-  background-color: #000000;
   background-color: #fff;
 }
 
@@ -68,7 +66,7 @@
 
 .navlink {
   /* font-size: 18px; */
-  color: rgb(0, 0, 0);
+  color:  white;
   /* color: black; */
   /* text-transform: uppercase; */
 }
@@ -105,15 +103,15 @@
 }
 
 .word1 {
-  --color-1: #000000;
-  --color-2: #000000;
-  --color-3: #000000;
+  --color-1: white;
+  --color-2: white;
+  --color-3: white;;
 }
 
 .word2 {
-  --color-1: #000000;
-  --color-2: #000000;
-  --color-3: #000000;
+  --color-1: white;
+  --color-2: white;
+  --color-3: white;
 }
 
 @keyframes color-animation {
