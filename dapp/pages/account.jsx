@@ -25,13 +25,10 @@ export default function Account() {
       </Head>
 
       <main className={styles.main}>
-        <div>
-         <CheckBalance/>
+        <div className={styles.info}>
+          <CheckBalance/>
         </div>
-        <div className={styles.title}>
-          <span className={`${styles.titleWord} ${styles.word2}`}>
-            My Videos
-          </span>
+        <div className={styles.collections}>
           <div>
             <OwnerVideos/>
           </div>

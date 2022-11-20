@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useAccount, useContractRead, usePrepareContractWrite, useProvider, useSigner } from 'wagmi';
+import styles from "../styles/CheckBalance.module.css"
 
 import { ClaimTokens  } from "./ClaimTokens";
 
@@ -60,20 +61,20 @@ export const CheckBalance = () => {
 
   return (
     <div>
-  <div className="pt-2">
-    <button disabled={!canFetchBalance} hidden={!canFetchBalance}
-      className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
-      onClick={() => handleClick()}
-    >
-      Available DToks:{balance}
-    </button>
-  </div>
-  { canMint ? (
-            <ClaimTokens/>
-          ) : null }
-  { isError ? (
-     <label>{error}</label>
-  ) : null }
+      <div className={styles.container}>
+        <button disabled={!canFetchBalance} hidden={!canFetchBalance}
+          className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+          onClick={() => handleClick()}
+        >
+          Available DToks:{balance}
+        </button>
+      </div>
+      { canMint ? (
+                <ClaimTokens/>
+              ) : null }
+      { isError ? (
+        <label>{error}</label>
+      ) : null }
   </div>
   )
 }

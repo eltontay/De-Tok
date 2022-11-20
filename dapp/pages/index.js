@@ -37,7 +37,10 @@ export default function Home() {
                 Immortalising Viral Videos
               </span>
             </div>
-            <div className={styles.collections}>
+          </div>
+        <div className={styles.hero}>{/* <Image src={hero} /> */}</div>
+        </main>
+        <div className={styles.collections}>
                {/* Free Video Showcase */}
                <div className={styles.collection}>
                  <TrendingVideos/>
@@ -47,9 +50,6 @@ export default function Home() {
                  <BasicVideos/>
                </div>
             </div>
-          </div>
-        <div className={styles.hero}>{/* <Image src={hero} /> */}</div>
-        </main>
       </div>
     </>
   );

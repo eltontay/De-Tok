@@ -1,4 +1,6 @@
 .main {
+    min-height: 100vh;
+    min-width: 80vh;
     padding-top: 6rem;
     padding-bottom: 1rem;
     display: flex;
@@ -20,6 +22,15 @@
     animation: color-animation 4s linear infinite;
   }
   
+  .info{
+    display: flex;
+    justify-content: center;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+
   .word1 {
     --color-1: #080808;
     --color-2: #080808;
@@ -31,6 +42,46 @@
     --color-2: #080808;
     --color-3: #080808;
   }
+
+  .actions {
+    border-top: 3px solid #111;
+    margin-top: 2rem;
+    border-radius: 3px;
+    padding: 0.5rem 0;
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: top;
+
+  }
+
+  .collections {
+    min-width: 95vh;
+    border-top: 3px solid #111;
+    margin-top: 2rem;
+    border-radius: 3px;
+    padding: 0.5rem 0;
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: top;
+  }
+
+  
+
+  .collection {
+    border: 1px solid #111;
+    padding: 4rem 0;
+    margin: 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: center;
+  }
+  
    
   @keyframes color-animation {
     0% {
