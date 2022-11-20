@@ -25,21 +25,20 @@ import React, { useEffect, useState } from "react";
 
 export default function VideoGallery(cids) {
   const [info, setInfo] = useState([]);
-  const [videos, setVideos] = useState([]);
+  const [urls, setUrls] = useState([]);
 
   useEffect(() => {
     const getInfo = async () => {
       try {
-        var videos = [];
+        var urls = [];
         if (Object.keys(cids["data"]).length > 1) {
           for (let i = 0; i < cids["data"].length; i++) {
-            const res = await helpers.getCidInfo(cids["data"][i]);
-            videos.push(res);
+           // const res = await helpers.getCidInfo(cids["data"][i]);
+           const url=  `https://ipfs.io/ipfs/${cids["data"][i]}`
+           urls.push(url);   
           }
         }
-
-        console.log(videos);
-        setVideos(videos);
+        setUrls(urls);
       } catch (error) {
         console.log(error);
       }
@@ -60,10 +59,8 @@ export default function VideoGallery(cids) {
         videojs={true}
         videojsTheme="vjs-theme-fantasy"
       >
-        {videos.map((video) => {
-          console.log(video);
-          const { url, type } = video;
-          return <VideoComponent src={{ url, type }}></VideoComponent>;
+        {urls.map((url) => {
+          return <VideoComponent src={{ url, type:"video/mp4" }}></VideoComponent>;
         })}
         {info}
       </LightGallery>

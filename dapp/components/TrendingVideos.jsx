@@ -43,7 +43,6 @@ export const TrendingVideos = () => {
       <div className={styles.title}>
         <span className={`${styles.title.description}`}>Trending Videos</span>
       </div>
-      <label>{videoIds}</label>
       <div>
         <VideoGallery data={ videoIds }></VideoGallery>
       </div>

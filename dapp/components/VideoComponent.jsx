@@ -15,7 +15,7 @@ export const VideoComponent = ({ src }) => {
       <a
         className="gallery-item" 
         data-lg-size="1406-1390"
-        data-video={dataSrc}
+        data-video={url}
         data-sub-html=""
         >
          <img alt="img1" src="http://placekitten.com/g/100/100" />

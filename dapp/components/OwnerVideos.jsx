@@ -50,7 +50,6 @@ export const OwnerVideos = () => {
       <div className={styles.title}>
         <span className={`${styles.title.description}`}>My Videos</span>
       </div>
-      <label>{videoIds}</label>
       <div>
         <VideoGallery data={ videoIds }></VideoGallery>
       </div>
