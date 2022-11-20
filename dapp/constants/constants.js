@@ -4,7 +4,7 @@ export const DTok_Contract_Address =
 export const DVid_Contract_Address =
   '0xdE5Dfc54F05a4D68E1B43DC69fe242eb5b59e3a6';
 export const DeTok_Contract_Address =
-  '0x5c667dA1817856CBfc95e357B2af2f7d2B6ff5AB';
+  '0x21099C20886c634de9E5eC4B4F9658bEA983F12c';
 
 export const DTOK_ABI = [
   {

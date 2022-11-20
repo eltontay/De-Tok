@@ -1,27 +1,27 @@
-import LightGallery from "lightgallery/react";
+import LightGallery from 'lightgallery/react';
 // import styles
-import "lightgallery/css/lightgallery.css";
-import "lightgallery/css/lg-zoom.css";
-import "lightgallery/css/lg-thumbnail.css";
+import 'lightgallery/css/lightgallery.css';
+import 'lightgallery/css/lg-zoom.css';
+import 'lightgallery/css/lg-thumbnail.css';
 
 // import plugins if you need
-import lgThumbnail from "lightgallery/plugins/thumbnail";
-import lgZoom from "lightgallery/plugins/zoom";
-import lgVideo from "lightgallery/plugins/video";
+import lgThumbnail from 'lightgallery/plugins/thumbnail';
+import lgZoom from 'lightgallery/plugins/zoom';
+import lgVideo from 'lightgallery/plugins/video';
 
 // lightgallery styles
-import "lightgallery/css/lightgallery.css";
-import "lightgallery/css/lg-video.css";
+import 'lightgallery/css/lightgallery.css';
+import 'lightgallery/css/lg-video.css';
 
 // videojs styles
-import "video.js/dist/video-js.css";
-import "@videojs/themes/dist/fantasy/index.css";
+import 'video.js/dist/video-js.css';
+import '@videojs/themes/dist/fantasy/index.css';
 
-import styles from "../styles/VideoGallery.module.css";
+import styles from '../styles/VideoGallery.module.css';
 
-import { VideoComponent } from "./VideoComponent";
-import helpers from "../helper";
-import React, { useEffect, useState } from "react";
+import { VideoComponent } from './VideoComponent';
+import helpers from '../helper';
+import React, { useEffect, useState } from 'react';
 
 export default function VideoGallery(cids) {
   const [info, setInfo] = useState([]);
@@ -31,13 +31,11 @@ export default function VideoGallery(cids) {
     const getInfo = async () => {
       try {
         var videos = [];
-        if (Object.keys(cids["data"]).length > 1) {
-          for (let i = 0; i < cids["data"].length; i++) {
-            const res = await helpers.getCidInfo(cids["data"][i]);
-            videos.push(res);
-          }
+        for (let i = 0; i < cids['data'].length; i++) {
+          const res = await helpers.getCidInfo(cids['data'][i]);
+          videos.push(res);
         }
-
+        console.log('videos');
         console.log(videos);
         setVideos(videos);
       } catch (error) {
