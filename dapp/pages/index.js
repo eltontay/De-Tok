@@ -1,8 +1,8 @@
-import Image from 'next/image';
-import styles from '../styles/Home.module.css';
-import Head from 'next/head';
-import { BasicVideos } from '../components/BasicVideos';
-import { TrendingVideos } from '../components/TrendingVideos';
+import Image from "next/image";
+import styles from "../styles/Home.module.css";
+import Head from "next/head";
+import { BasicVideos } from "../components/BasicVideos";
+import { TrendingVideos } from "../components/TrendingVideos";
 export default function Home() {
   return (
     <>
@@ -17,20 +17,20 @@ export default function Home() {
         <main className={styles.main}>
           <div>
             <div className={styles.title}>
-              <span className={`${styles.titleWord} ${styles.word2}`}>
-                De Tok
+              <span className={`${styles.titleWord} ${styles.word2} font-bold`}>
+                DE-TOK
               </span>
             </div>
             <div className={styles.tagline}>
               <span className={`${styles.titleWord} ${styles.word2}`}>
-                Trend-And-Earn{' '}
+                Trend-And-Earn{" "}
               </span>
               <span className={`${styles.titleWord} ${styles.word1}`}>
                 Rewarding Content Providers
               </span>
               <span className={`${styles.titleWord} ${styles.word2}`}>
-                {' '}
-                Die{' '}
+                {" "}
+                Die{" "}
               </span>
               <span className={`${styles.titleWord} ${styles.word1}`}>
                 Immortalising Viral Videos
