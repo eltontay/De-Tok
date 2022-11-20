@@ -1,10 +1,10 @@
-import React, { useState, useCallback, useEffect } from "react";
-import Head from "next/head";
-import styles from "../styles/MintVideo.module.css";
-import { useDropzone } from "react-dropzone";
-import { Web3Storage } from "web3.storage";
-import { useContractWrite, usePrepareContractWrite } from "wagmi";
-import { DETOK_ABI, DeTok_Contract_Address } from "../constants/constants";
+import React, { useState, useCallback, useEffect } from 'react';
+import Head from 'next/head';
+import styles from '../styles/MintVideo.module.css';
+import { useDropzone } from 'react-dropzone';
+import { Web3Storage } from 'web3.storage';
+import { useContractWrite, usePrepareContractWrite } from 'wagmi';
+import { DETOK_ABI, DeTok_Contract_Address } from '../constants/constants';
 
 function makeStorageClient() {
   return new Web3Storage({ token: process.env.NEXT_PUBLIC_WEB3STORAGE_TOKEN });
@@ -13,15 +13,15 @@ function makeStorageClient() {
 const storeContent = async (files) => {
   const client = makeStorageClient();
   const cid = await client.put(files);
-  console.log("stored files with cid:", cid);
+  console.log('stored files with cid:', cid);
   // for what?
   setTimeout(3000);
   return cid;
 };
 
 const makeJsonFileObject = (json) => {
-  const blob = new Blob([JSON.stringify(json)], { type: "application/json" });
-  return new File([blob], "metadata.json");
+  const blob = new Blob([JSON.stringify(json)], { type: 'application/json' });
+  return new File([blob], 'metadata.json');
 };
 
 // const hoge = async () => {
@@ -42,9 +42,9 @@ const makeJsonFileObject = (json) => {
 // cid: bafybeigkdrxadzsbdeyomforg7yzvm2wrz35clnp6ifnwxxhwjohz7xvpm
 
 export default function MintVideo() {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [author, setAuthor] = useState("");
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [author, setAuthor] = useState('');
   const [video, setVideo] = useState();
   const [payable, setPayable] = useState(false);
   const [cid, setCid] = useState();
@@ -53,7 +53,7 @@ export default function MintVideo() {
   const { config } = usePrepareContractWrite({
     address: DeTok_Contract_Address,
     abi: DETOK_ABI,
-    functionName: "mintVideo",
+    functionName: 'mintVideo',
     // https://github.com/wagmi-dev/wagmi/issues/794
     args: [
       `https://${cid}.ipfs.w3s.link/`,
@@ -72,9 +72,9 @@ export default function MintVideo() {
       if (!write) {
         setCid(null);
         setLoading(false);
-        throw Error("write is null");
+        throw Error('write is null');
       }
-      console.log("call contract");
+      console.log('call contract');
       write();
       setCid(null);
       setLoading(false);
@@ -86,7 +86,7 @@ export default function MintVideo() {
       return;
     }
     setLoading(true);
-    console.log("uploading...");
+    console.log('uploading...');
     const jsonFile = makeJsonFileObject({ title, description, author });
     console.log(jsonFile);
     console.log(video);
@@ -173,8 +173,8 @@ export default function MintVideo() {
                 <input {...getInputProps()} />
                 <div className="px-4">
                   {isDragActive
-                    ? "Drop the files here ..."
-                    : "Drag & drop some files here, or click to select files"}
+                    ? 'Drop the files here ...'
+                    : 'Drag & drop some files here, or click to select files'}
                 </div>
               </div>
             )}
@@ -197,7 +197,7 @@ export default function MintVideo() {
               onClick={() => onSubmit()}
               disabled={loading || isLoading}
             >
-              {loading || isLoading ? "Minting..." : "Mint Video"}
+              {loading || isLoading ? 'Minting...' : 'Mint Video'}
             </button>
           </div>
         </div>
