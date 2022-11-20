@@ -98,7 +98,7 @@ contract DeTok {
         require(checkExist(videoId), "Video does not Exist");
         require(checkFree(videoId), "Video is not Free!");
         _basicVideos[videoId].views += 1;
-        if (_basicVideos[videoId].views > TRENDING_VIEWS_THRESHOLD) {
+        if (_basicVideos[videoId].views > TRENDING_VIEWS_THRESHOLD && _basicVideos[videoId].payableVideo == true) {
             _videoType[videoId] = VideoType.TRENDING; // changing enum type
             _trendingVideos[videoId] = _basicVideos[videoId]; // moving from basic to trending
             _basicVideos[videoId].exist = false; // soft delete
