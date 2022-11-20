@@ -1,10 +1,10 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import Head from 'next/head';
-import styles from '../styles/MintVideo.module.css';
-import { useDropzone } from 'react-dropzone';
-import { Web3Storage } from 'web3.storage';
-import { useContractWrite, usePrepareContractWrite } from 'wagmi';
-import { DETOK_ABI, DeTok_Contract_Address } from '../constants/constants';
+import React, { useState, useCallback, useEffect } from "react";
+import Head from "next/head";
+import styles from "../styles/MintVideo.module.css";
+import { useDropzone } from "react-dropzone";
+import { Web3Storage } from "web3.storage";
+import { useContract, useSigner } from "wagmi";
+import { DETOK_ABI, DeTok_Contract_Address } from "../constants/constants";
 
 function makeStorageClient() {
   return new Web3Storage({ token: process.env.NEXT_PUBLIC_WEB3STORAGE_TOKEN });
@@ -13,91 +13,65 @@ function makeStorageClient() {
 const storeContent = async (files) => {
   const client = makeStorageClient();
   const cid = await client.put(files);
-  console.log('stored files with cid:', cid);
+  console.log("stored files with cid:", cid);
   // for what?
   setTimeout(3000);
   return cid;
 };
 
 const makeJsonFileObject = (json) => {
-  const blob = new Blob([JSON.stringify(json)], { type: 'application/json' });
-  return new File([blob], 'metadata.json');
+  const blob = new Blob([JSON.stringify(json)], { type: "application/json" });
+  return new File([blob], "metadata.json");
 };
 
-// const hoge = async () => {
-//   // const cid = await storage.put(files,options);
-//   console.log("get files");
-//   const storage = makeStorageClient();
-//   const cid = "bafybeidtig7gruy5yirxjhbp675apd3qkrr6soawhh7bhpj7l4sdp7pawe";
-//   const resdata = await storage.get(cid);
-//   const filesReterived = await resdata.files();
-//   for (const file of filesReterived) {
-//     console.log(file);
-//     console.log(`${file.cid} ${file.name} ${file.size}`);
-//   }
-//   const res = await storage.status(cid);
-//   console.log(res);
-// };
-// hoge();
-// cid: bafybeigkdrxadzsbdeyomforg7yzvm2wrz35clnp6ifnwxxhwjohz7xvpm
-
 export default function MintVideo() {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [author, setAuthor] = useState('');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [author, setAuthor] = useState("");
   const [video, setVideo] = useState();
   const [payable, setPayable] = useState(false);
-  const [cid, setCid] = useState();
-  const [loading, setLoading] = useState();
 
-  const { config } = usePrepareContractWrite({
+  const [loading, setLoading] = useState();
+  const { data: signer, isError } = useSigner();
+
+  const contract = useContract({
     address: DeTok_Contract_Address,
     abi: DETOK_ABI,
-    functionName: 'mintVideo',
-    // https://github.com/wagmi-dev/wagmi/issues/794
-    args: [
-      `https://${cid}.ipfs.w3s.link/`,
-      cid,
-      payable,
-      {
-        gasLimit: 100000000,
-      },
-    ],
   });
-
-  const { data, isLoading, isSuccess, write } = useContractWrite(config);
-
-  useEffect(() => {
-    if (cid) {
-      if (!write) {
-        setCid(null);
-        setLoading(false);
-        throw Error('write is null');
-      }
-      console.log('call contract');
-      write();
-      setCid(null);
-      setLoading(false);
-    }
-  }, [cid]);
 
   const onSubmit = async () => {
     if (!video) {
       return;
     }
+
     setLoading(true);
-    console.log('uploading...');
+    console.log("uploading...");
     const jsonFile = makeJsonFileObject({ title, description, author });
     console.log(jsonFile);
     console.log(video);
     const cid = await storeContent([video, jsonFile]);
     console.log(cid);
-    setCid(cid);
-    // setCid("bafybeidtig7gruy5yirxjhbp675apd3qkrr6soawhh7bhpj7l4sdp7pawe");
+
+    try {
+      console.log("sending transaction...");
+      const tx = await contract
+        .connect(signer)
+        .mintVideo(`https://${cid}.ipfs.w3s.link/`, cid, payable);
+      // console.log(tx);
+      const receipt = await tx.wait();
+      console.log(receipt);
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+      console.log(e);
+    }
   };
 
   const onDrop = useCallback(async (acceptedFiles) => {
-    // const cid = await storeContent(acceptedFiles);
+    // const videoFile = acceptedFiles[0];
+    // const myVideoFile = new File([videoFile], "video.mp4", {
+    //   type: videoFile.type,
+    // });
     setVideo(acceptedFiles[0]);
   }, []);
 
@@ -173,8 +147,8 @@ export default function MintVideo() {
                 <input {...getInputProps()} />
                 <div className="px-4">
                   {isDragActive
-                    ? 'Drop the files here ...'
-                    : 'Drag & drop some files here, or click to select files'}
+                    ? "Drop the files here ..."
+                    : "Drag & drop some files here, or click to select files"}
                 </div>
               </div>
             )}
@@ -195,9 +169,9 @@ export default function MintVideo() {
             <button
               className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
               onClick={() => onSubmit()}
-              disabled={loading || isLoading}
+              disabled={loading}
             >
-              {loading || isLoading ? 'Minting...' : 'Mint Video'}
+              {loading ? "Minting..." : "Mint Video"}
             </button>
           </div>
         </div>
