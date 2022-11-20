@@ -93,24 +93,26 @@ contract DeTok {
         totalVideo += 1;
     }
 
-    // Track view counter and change basic to trending - current threshold is set at 10
-    function viewVideo(uint256 videoId) public payable {
+    // Viewing free videos
+    function viewFree(uint256 videoId) public {
         require(checkExist(videoId), "Video does not Exist");
-        if (_videoType[videoId] == VideoType.BASIC) {
-            _basicVideos[videoId].views += 1;
-            if (_basicVideos[videoId].views > TRENDING_VIEWS_THRESHOLD) {
-                _videoType[videoId] = VideoType.TRENDING; // changing enum type
-                _trendingVideos[videoId] = _basicVideos[videoId]; // moving from basic to trending
-                _basicVideos[videoId].exist = false; // soft delete
-                totalBasic -= 1;
-                totalTrending += 1;
-            }
-            return;
+        require(checkFree(videoId), "Video is not Free!");
+        _basicVideos[videoId].views += 1;
+        if (_basicVideos[videoId].views > TRENDING_VIEWS_THRESHOLD) {
+            _videoType[videoId] = VideoType.TRENDING; // changing enum type
+            _trendingVideos[videoId] = _basicVideos[videoId]; // moving from basic to trending
+            _basicVideos[videoId].exist = false; // soft delete
+            totalBasic -= 1;
+            totalTrending += 1;            
         }
+    }
+
+    // Paying to view payable videos
+    function viewPayable(uint256 videoId) public payable {
+        require(checkExist(videoId), "Video does not Exist");
         address payable videoOwner = payable(_trendingVideos[videoId].owner);
         _dtok.transferFrom(msg.sender, videoOwner, DEFAULT_PRICE); // Error will throw if insufficient funds
         _trendingVideos[videoId].views += 1;
-
     }
 
     // helpers
@@ -305,6 +307,13 @@ contract DeTok {
 
     function checkExist(uint256 videoId) public view returns (bool) {
         if (_basicVideos[videoId].exist || _trendingVideos[videoId].exist) {
+            return true;
+        }
+        return false;
+    }
+
+    function checkFree(uint256 videoId) public view returns(bool) {
+        if (_basicVideos[videoId].exist) {
             return true;
         }
         return false;

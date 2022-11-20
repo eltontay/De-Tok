@@ -4,7 +4,7 @@ export const DTok_Contract_Address =
 export const DVid_Contract_Address =
   '0xdE5Dfc54F05a4D68E1B43DC69fe242eb5b59e3a6';
 export const DeTok_Contract_Address =
-  '0x073FB2e65F27524eC9D4DAC00928F510E1dBF7D1';
+  '0x86b977bc018e4d3a9E2ce905A92ac1a6EFA8EF3D';
 
 export const DTOK_ABI = [
   {
@@ -1031,6 +1031,25 @@ export const DETOK_ABI = [
     type: 'function',
   },
   {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'videoId',
+        type: 'uint256',
+      },
+    ],
+    name: 'checkFree',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [],
     name: 'claimToken',
     outputs: [],
@@ -1286,7 +1305,20 @@ export const DETOK_ABI = [
         type: 'uint256',
       },
     ],
-    name: 'viewVideo',
+    name: 'viewFree',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'videoId',
+        type: 'uint256',
+      },
+    ],
+    name: 'viewPayable',
     outputs: [],
     stateMutability: 'payable',
     type: 'function',
