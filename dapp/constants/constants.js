@@ -1,10 +1,10 @@
 export const OwnerAddress = '0xD16ECd32Ad107D0b909130b325c79B64cf3C0d28';
 export const DTok_Contract_Address =
-  '0xbdf799A8758c742f51Dd97c8D3022a2A3f701830';
+  '0x8fb1Ea014e59a2f056F63e57398b013c6536301B';
 export const DVid_Contract_Address =
-  '0xC0df1a0BD73015813d5b49a8B8A9a0665C7850ef';
+  '0xdE5Dfc54F05a4D68E1B43DC69fe242eb5b59e3a6';
 export const DeTok_Contract_Address =
-  '0x33B7F62811E84b407cC8bBD7DF6C5BCb2a1B19da';
+  '0x335568fFfe651DE4CB17E0FdCf9872eceDc580a4';
 
 export const DTOK_ABI = [
   {
