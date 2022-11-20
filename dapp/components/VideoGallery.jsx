@@ -20,8 +20,13 @@ import "@videojs/themes/dist/fantasy/index.css";
 
 import styles from "../styles/VideoGallery.module.css";
 
+import { VideoComponent } from './VideoComponent';
 
-export default function VideoGallery() {
+
+export default function VideoGallery({ videos }) {
+    const url= "https://bafybeidtig7gruy5yirxjhbp675apd3qkrr6soawhh7bhpj7l4sdp7pawe.ipfs.w3s.link/ipfs/bafybeidtig7gruy5yirxjhbp675apd3qkrr6soawhh7bhpj7l4sdp7pawe/sample-5s.mp4";
+    const type = "video/mp4";
+
     return (
         <div className={styles.mediaGrid}>
             <LightGallery
@@ -31,31 +36,7 @@ export default function VideoGallery() {
             videojs={true}
             videojsTheme="vjs-theme-fantasy"
             >
-            <a className={styles.mediaItem} href="https://placekitten.com/800/400">
-                <img alt="img1" src="http://placekitten.com/g/400/400" />
-            </a>
-            <a className={styles.mediaItem} href="https://placekitten.com/800/400">
-                <img alt="img1" src="http://placekitten.com/g/400/400" />
-            </a>
-            <a className={styles.mediaItem} href="https://placekitten.com/800/400">
-                <img alt="img1" src="http://placekitten.com/g/400/400" />
-            </a>
-            <a className={styles.mediaItem} href="https://placekitten.com/800/400">
-                <img alt="img1" src="http://placekitten.com/g/400/400" />
-            </a>
-            <a className={styles.mediaItem} 
-                data-lg-size="1280-720"
-                data-src="//https://youtu.be/WZFIo4yj17c"
-                data-poster="https://img.youtube.com/vi/egyIeygdS_E/maxresdefault.jpg"
-                data-sub-html="<h4>Visual Soundscapes - Mountains | Planet Earth II | BBC America</h4><p>On the heels of Planet Earth II's record-breaking Emmy nominations, BBC America presents stunning visual soundscapes from the series' amazing habitats.</p>"
-            >
-                <img
-                    width="300"
-                    height="100"
-                    className={styles.mediaItemImg} 
-                    src="https://img.youtube.com/vi/egyIeygdS_E/maxresdefault.jpg"
-                />
-            </a>
+             <VideoComponent src={{ url, type}}></VideoComponent>     
            </LightGallery>
        </div>
     );

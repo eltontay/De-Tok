@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useAccount, useContractRead, useProvider, useSigner } from 'wagmi';
 
+import VideoGallery from "./VideoGallery";
+
 import styles from "../styles/TrendingVideos.module.css";
 
 import {
@@ -40,7 +42,7 @@ export const TrendingVideos = () => {
               </span>
           </div>
           <div>
-              {videoIds}
+             <VideoGallery></VideoGallery>
           </div>
       </div>
     )
