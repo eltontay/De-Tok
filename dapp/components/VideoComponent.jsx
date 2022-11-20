@@ -1,5 +1,9 @@
 import React, { useState, useCallback, useEffect, Children } from "react";
 
+// video src
+// video type
+// Image to show 
+// storage deal info
 
 export const VideoComponent = ({ src }) => {
     const { url, type } = src;
