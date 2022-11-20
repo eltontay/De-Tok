@@ -24,20 +24,20 @@ const makeJsonFileObject = (json) => {
   return new File([blob], "metadata.json");
 };
 
-const hoge = async () => {
-  // const cid = await storage.put(files,options);
-  console.log("get files");
-  const storage = makeStorageClient();
-  const cid = "bafybeidtig7gruy5yirxjhbp675apd3qkrr6soawhh7bhpj7l4sdp7pawe";
-  const resdata = await storage.get(cid);
-  const filesReterived = await resdata.files();
-  for (const file of filesReterived) {
-    console.log(file);
-    console.log(`${file.cid} ${file.name} ${file.size}`);
-  }
-  const res = await storage.status(cid);
-  console.log(res);
-};
+// const hoge = async () => {
+//   // const cid = await storage.put(files,options);
+//   console.log("get files");
+//   const storage = makeStorageClient();
+//   const cid = "bafybeidtig7gruy5yirxjhbp675apd3qkrr6soawhh7bhpj7l4sdp7pawe";
+//   const resdata = await storage.get(cid);
+//   const filesReterived = await resdata.files();
+//   for (const file of filesReterived) {
+//     console.log(file);
+//     console.log(`${file.cid} ${file.name} ${file.size}`);
+//   }
+//   const res = await storage.status(cid);
+//   console.log(res);
+// };
 // hoge();
 // cid: bafybeigkdrxadzsbdeyomforg7yzvm2wrz35clnp6ifnwxxhwjohz7xvpm
 
@@ -48,21 +48,36 @@ export default function MintVideo() {
   const [video, setVideo] = useState();
   const [payable, setPayable] = useState(false);
   const [cid, setCid] = useState();
+  const [loading, setLoading] = useState();
 
   const { config } = usePrepareContractWrite({
     address: DeTok_Contract_Address,
     abi: DETOK_ABI,
     functionName: "mintVideo",
-    args: [`https://${cid}.ipfs.w3s.link/`, cid, payable],
+    // https://github.com/wagmi-dev/wagmi/issues/794
+    args: [
+      `https://${cid}.ipfs.w3s.link/`,
+      cid,
+      payable,
+      {
+        gasLimit: 100000000,
+      },
+    ],
   });
 
   const { data, isLoading, isSuccess, write } = useContractWrite(config);
-  // console.log(data, isLoading, isSuccess);
 
   useEffect(() => {
     if (cid) {
+      if (!write) {
+        setCid(null);
+        setLoading(false);
+        throw Error("write is null");
+      }
       console.log("call contract");
-      write?.();
+      write();
+      setCid(null);
+      setLoading(false);
     }
   }, [cid]);
 
@@ -70,6 +85,7 @@ export default function MintVideo() {
     if (!video) {
       return;
     }
+    setLoading(true);
     console.log("uploading...");
     const jsonFile = makeJsonFileObject({ title, description, author });
     console.log(jsonFile);
@@ -87,7 +103,7 @@ export default function MintVideo() {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    maxSize: 5242880, //5MB
+    maxSize: 5242880 * 2, //10MB
   });
   return (
     <>
@@ -179,8 +195,9 @@ export default function MintVideo() {
             <button
               className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
               onClick={() => onSubmit()}
+              disabled={loading || isLoading}
             >
-              Mint Video
+              {loading || isLoading ? "Minting..." : "Mint Video"}
             </button>
           </div>
         </div>
