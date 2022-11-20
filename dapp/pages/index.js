@@ -1,9 +1,9 @@
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
-import Head from "next/head";
-import { BasicVideos } from "../components/BasicVideos";
-import { TrendingVideos } from "../components/TrendingVideos";
-
+import Image from 'next/image';
+import styles from '../styles/Home.module.css';
+import Head from 'next/head';
+import { BasicVideos } from '../components/BasicVideos';
+import { TrendingVideos } from '../components/TrendingVideos';
+import { GetDeal } from '../components/GetDeal';
 export default function Home() {
   return (
     <>
@@ -24,32 +24,33 @@ export default function Home() {
             </div>
             <div className={styles.tagline}>
               <span className={`${styles.titleWord} ${styles.word2}`}>
-                Trend-And-Earn{" "}
+                Trend-And-Earn{' '}
               </span>
               <span className={`${styles.titleWord} ${styles.word1}`}>
                 Rewarding Content Providers
               </span>
               <span className={`${styles.titleWord} ${styles.word2}`}>
-                {" "}
-                Die{" "}
+                {' '}
+                Die{' '}
               </span>
               <span className={`${styles.titleWord} ${styles.word1}`}>
                 Immortalising Viral Videos
               </span>
             </div>
           </div>
-        <div className={styles.hero}>{/* <Image src={hero} /> */}</div>
+          <GetDeal />
+          <div className={styles.hero}>{/* <Image src={hero} /> */}</div>
         </main>
         <div className={styles.collections}>
-               {/* Free Video Showcase */}
-               <div className={styles.collection}>
-                 <TrendingVideos/>
-               </div>
-               {/* Paid Video Showcase */}
-               <div className={styles.collection}>
-                 <BasicVideos/>
-               </div>
-            </div>
+          {/* Free Video Showcase */}
+          <div className={styles.collection}>
+            <TrendingVideos />
+          </div>
+          {/* Paid Video Showcase */}
+          <div className={styles.collection}>
+            <BasicVideos />
+          </div>
+        </div>
       </div>
     </>
   );

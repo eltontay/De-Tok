@@ -4,7 +4,7 @@ export const DTok_Contract_Address =
 export const DVid_Contract_Address =
   '0xdE5Dfc54F05a4D68E1B43DC69fe242eb5b59e3a6';
 export const DeTok_Contract_Address =
-  '0x073FB2e65F27524eC9D4DAC00928F510E1dBF7D1';
+  '0x5c667dA1817856CBfc95e357B2af2f7d2B6ff5AB';
 
 export const DTOK_ABI = [
   {
@@ -972,6 +972,99 @@ export const DETOK_ABI = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: '_numberOfTokens',
+        type: 'uint256',
+      },
+    ],
+    name: 'buy',
+    outputs: [],
+    stateMutability: 'payable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'claimToken',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'videoId',
+        type: 'uint256',
+      },
+    ],
+    name: 'deleteVideo',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'string',
+        name: 'uri',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: 'cid',
+        type: 'string',
+      },
+      {
+        internalType: 'bool',
+        name: 'payableVideo_',
+        type: 'bool',
+      },
+    ],
+    name: 'mintVideo',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: 'videoId',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'videoId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256',
+      },
+    ],
+    name: 'setPayableThreshold',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'videoId',
+        type: 'uint256',
+      },
+    ],
+    name: 'setPayableVideo',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'contract DTok',
         name: 'dtok_',
         type: 'address',
@@ -986,6 +1079,45 @@ export const DETOK_ABI = [
     type: 'constructor',
   },
   {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'videoId',
+        type: 'uint256',
+      },
+    ],
+    name: 'unSetPayableVideo',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'videoId',
+        type: 'uint256',
+      },
+    ],
+    name: 'viewFree',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'videoId',
+        type: 'uint256',
+      },
+    ],
+    name: 'viewPayable',
+    outputs: [],
+    stateMutability: 'payable',
+    type: 'function',
+  },
+  {
     inputs: [],
     name: '_tokenPrice',
     outputs: [
@@ -996,19 +1128,6 @@ export const DETOK_ABI = [
       },
     ],
     stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_numberOfTokens',
-        type: 'uint256',
-      },
-    ],
-    name: 'buy',
-    outputs: [],
-    stateMutability: 'payable',
     type: 'function',
   },
   {
@@ -1031,13 +1150,6 @@ export const DETOK_ABI = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'claimToken',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
     inputs: [
       {
         internalType: 'uint256',
@@ -1045,9 +1157,15 @@ export const DETOK_ABI = [
         type: 'uint256',
       },
     ],
-    name: 'deleteVideo',
-    outputs: [],
-    stateMutability: 'nonpayable',
+    name: 'checkFree',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -1167,66 +1285,6 @@ export const DETOK_ABI = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'string',
-        name: 'uri',
-        type: 'string',
-      },
-      {
-        internalType: 'string',
-        name: 'cid',
-        type: 'string',
-      },
-      {
-        internalType: 'bool',
-        name: 'payableVideo_',
-        type: 'bool',
-      },
-    ],
-    name: 'mintVideo',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: 'videoId',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'videoId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'amount',
-        type: 'uint256',
-      },
-    ],
-    name: 'setPayableThreshold',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'videoId',
-        type: 'uint256',
-      },
-    ],
-    name: 'setPayableVideo',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
     inputs: [],
     name: 'totalBasic',
     outputs: [
@@ -1263,32 +1321,6 @@ export const DETOK_ABI = [
       },
     ],
     stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'videoId',
-        type: 'uint256',
-      },
-    ],
-    name: 'unSetPayableVideo',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'videoId',
-        type: 'uint256',
-      },
-    ],
-    name: 'viewVideo',
-    outputs: [],
-    stateMutability: 'payable',
     type: 'function',
   },
 ];
