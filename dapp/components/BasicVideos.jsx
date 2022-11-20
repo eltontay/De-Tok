@@ -1,4 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
+import styles from "../styles/BasicVideos.module.css";
+
 import { useAccount, useContractRead, useProvider, useSigner } from 'wagmi';
 import {
   DeTOK_ABI,
@@ -31,8 +33,16 @@ export const BasicVideos = () => {
 
     return (
       <div className="pt-2">
-          {videoIds}
-          <label>Replace with Basic video gallery</label>
+         <div className="pt-2">
+          <div className={styles.title}>
+          <span className={`${styles.title.description}`}>
+               Basic Videos
+            </span>
+          </div>
+          <div>
+            {videoIds}
+          </div>
+      </div>
       </div>
     )
 }

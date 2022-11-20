@@ -1,0 +1,10 @@
+.title{
+    margin: 3;
+    line-height: 0.75;
+    font-size: 1rem;
+}
+
+.title,
+.description {
+  text-align: center;
+}

@@ -37,20 +37,19 @@ export default function Home() {
                 Immortalising Viral Videos
               </span>
             </div>
-            {/* Free Video Showcase */}
-            <div className={styles.section}></div>
-            {/* Paid Video Showcase */}
-            <div className={styles.section}></div>
+            <div className={styles.collections}>
+               {/* Free Video Showcase */}
+               <div className={styles.collection}>
+                 <TrendingVideos/>
+               </div>
+               {/* Paid Video Showcase */}
+               <div className={styles.collection}>
+                 <BasicVideos/>
+               </div>
+            </div>
           </div>
-
-          <div className={styles.hero}>{/* <Image src={hero} /> */}</div>
+        <div className={styles.hero}>{/* <Image src={hero} /> */}</div>
         </main>
-        <div>
-          <TrendingVideos/>
-        </div>
-        <div>
-          <BasicVideos/>
-        </div>
       </div>
     </>
   );

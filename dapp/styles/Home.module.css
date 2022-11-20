@@ -73,6 +73,30 @@
   max-width: 800px;
 }
 
+.collections {
+  border-top: 3px solid #111;
+  margin-top: 3rem;
+  border-radius: 3px;
+  padding: 4rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.collection {
+  border: 1px solid #111;
+  padding: 4rem 0;
+  margin: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: center;
+}
+
+
 .card {
   margin: 1rem;
   padding: 1.5rem;

@@ -1,5 +1,8 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useAccount, useContractRead, useProvider, useSigner } from 'wagmi';
+
+import styles from "../styles/TrendingVideos.module.css";
+
 import {
   DeTOK_ABI,
   DeTok_Contract_Address
@@ -31,8 +34,14 @@ export const TrendingVideos = () => {
 
     return (
       <div className="pt-2">
-          {videoIds}
-          <label>Replace with Trending video gallery</label>
+          <div className={styles.title}>
+              <span className={`${styles.title.description}`}>
+                Trending Videos
+              </span>
+          </div>
+          <div>
+              {videoIds}
+          </div>
       </div>
     )
 }
