@@ -10,6 +10,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: #d5c99fd1;
 }
 
 .footer {
@@ -58,7 +59,7 @@
 }
 
 .titleWord {
-color:rgb(0, 0, 0)
+color:rgb(74 45 13);
 }
 .code {
   background: #fafafa;
