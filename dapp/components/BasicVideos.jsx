@@ -10,7 +10,7 @@ export const BasicVideos = () => {
   const [status, setstatus] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [videoIds, setVideoIds] = useState([]);
+  const [videoIds, setVideoIds] = useState();
   const [error, setError] = useState('');
 
   const { refetch } = useContractRead({
@@ -34,11 +34,10 @@ export const BasicVideos = () => {
   return (
     <div className="pt-2">
       <div className="pt-2">
-        <label>{videoIds}</label>
         <div>
-          <VideoGallery data={{ videoIds }}></VideoGallery>
+          {/* {videoIds} */}
+          <VideoGallery data={videoIds}></VideoGallery>
         </div>
-        <div>{videoIds}</div>
       </div>
     </div>
   );
