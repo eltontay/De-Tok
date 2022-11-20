@@ -58,8 +58,8 @@ export default function MintVideo() {
         .connect(signer)
         .mintVideo(`https://${cid}.ipfs.w3s.link/`, cid, payable);
       // console.log(tx);
-      const receipt = await tx.wait();
-      console.log(receipt);
+      // const receipt = await tx.wait();
+      // console.log(receipt);
       setLoading(false);
     } catch (e) {
       setLoading(false);
