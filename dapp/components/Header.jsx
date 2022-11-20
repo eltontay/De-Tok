@@ -19,10 +19,11 @@ export const Header = ({}) => {
             <div className={styles.title}>
               <span className={`${styles.titleWord} ${styles.word1}`}>De </span>
               <span className={`${styles.titleWord} ${styles.word2}`}>Tok</span>
+              <span className={`${styles.tagtext}`}>Viral Videos</span>
             </div>
           </Link>
           <div className={styles.navlogo}>
-            <Image src="/video.png" alt="De-Tok Logo" width={20} height={20} />
+            <Image color="red" src="/video.png" alt="De-Tok Logo" width={20} height={20} />
           </div>
         </div>
         <ul

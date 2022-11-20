@@ -102,6 +102,20 @@
   animation: color-animation 4s linear infinite;
 }
 
+.tagLine {
+  background-color: #fff;
+}
+
+.tagtext{
+  color: #f6fba8;
+  font-weight: 500;
+  font-size: 15px;
+  margin: 1px;
+  margin-left: 8px;
+  border-bottom: 1px solid #f6fba8;
+  margin-bottom: 3px;
+}
+
 .word1 {
   --color-1: white;
   --color-2: white;
