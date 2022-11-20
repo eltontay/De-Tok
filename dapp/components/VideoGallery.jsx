@@ -25,19 +25,21 @@ import React, { useEffect, useState } from 'react';
 
 export default function VideoGallery(cids) {
   const [info, setInfo] = useState([]);
+  const [videos, setVideos] = useState([]);
 
   useEffect(() => {
     const getInfo = async () => {
       try {
-        var vid = [];
+        var videos = [];
         if (Object.keys(cids['data']).length > 1) {
           for (let i = 0; i < cids['data'].length; i++) {
             const res = await helpers.getCidInfo(cids['data'][i]);
-            console.log('res', res);
-            vid.push(res);
+            videos.push(res);
           }
         }
-        //setInfo(vid);
+
+        console.log(videos)
+        setVideos(videos);
       } catch (error) {
         console.log(error);
       }
@@ -45,9 +47,8 @@ export default function VideoGallery(cids) {
     getInfo();
   }, [cids]);
 
-  const url =
-    'https://bafybeidtig7gruy5yirxjhbp675apd3qkrr6soawhh7bhpj7l4sdp7pawe.ipfs.w3s.link/ipfs/bafybeidtig7gruy5yirxjhbp675apd3qkrr6soawhh7bhpj7l4sdp7pawe/sample-5s.mp4';
-  const type = 'video/mp4';
+ // const url =    'https://bafybeidtig7gruy5yirxjhbp675apd3qkrr6soawhh7bhpj7l4sdp7pawe.ipfs.w3s.link/ipfs/bafybeidtig7gruy5yirxjhbp675apd3qkrr6soawhh7bhpj7l4sdp7pawe/sample-5s.mp4';
+ // const type = 'video/mp4';
 
   return (
     <div className={styles.mediaGrid}>
@@ -58,7 +59,12 @@ export default function VideoGallery(cids) {
         videojs={true}
         videojsTheme="vjs-theme-fantasy"
       >
-        <VideoComponent src={{ url, type }}></VideoComponent>
+        {videos.map((video) => {
+          console.log(video)
+          const {url, type} = video;
+          return( <VideoComponent src={{ url, type }}></VideoComponent> )
+         })
+        }
         {info}
       </LightGallery>
     </div>
