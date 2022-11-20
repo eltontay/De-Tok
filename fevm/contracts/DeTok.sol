@@ -60,7 +60,7 @@ contract DeTok {
     }
 
     // Registered De-Tok user can claim 100 DTOK Tokens
-    function claimToken() public payable checkClaimed(msg.sender) {
+    function claimToken() public checkClaimed(msg.sender) {
         _claimedAddress[msg.sender] = true;
         _dtok.mint(msg.sender, CLAIMABLE_TOKEN);
     }
