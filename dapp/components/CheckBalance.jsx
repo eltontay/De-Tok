@@ -55,16 +55,18 @@ export const CheckBalance = () => {
   return (
     <div>
       <div className={styles.container}>
-        <button
-          disabled={!canFetchBalance}
-          hidden={!canFetchBalance}
-          className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow marign px-2"
-        >
-          Available DToks:
-          {balance && utils.formatEther(BigNumber.from(balance))}
-        </button>
-        {canMint ? <ClaimTokens /> : null}
-        {isError ? <label>{error}</label> : null}
+        <div className="px-2">
+          <button
+            disabled={!canFetchBalance}
+            hidden={!canFetchBalance}
+            className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow marign px-2"
+          >
+            Available DToks:
+            {balance && utils.formatEther(BigNumber.from(balance))}
+          </button>
+          {canMint ? <ClaimTokens /> : null}
+          {isError ? <label>{error}</label> : null}
+        </div>
       </div>
     </div>
   );
