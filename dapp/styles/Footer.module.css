@@ -1,7 +1,7 @@
 .footer {
-    border-top: 1px solid #f88922;
+    border-top: 1px solid grey;
     /* padding: 20px; */
-    background: #ebd2d2;
+    background: black;
     max-height: 8vh;
     /* display: flex;
     flex-direction: column;
@@ -13,7 +13,7 @@
 
 
 .footer_items {
-    background: #cfb7b7;
+    background: black;
     width: 100%;
     padding: 1.2rem;
 
