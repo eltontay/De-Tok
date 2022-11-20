@@ -3,7 +3,6 @@ import styles from '../styles/Home.module.css';
 import Head from 'next/head';
 import { BasicVideos } from '../components/BasicVideos';
 import { TrendingVideos } from '../components/TrendingVideos';
-import { GetDeal } from '../components/GetDeal';
 export default function Home() {
   return (
     <>
@@ -38,7 +37,6 @@ export default function Home() {
               </span>
             </div>
           </div>
-          <GetDeal />
           <div className={styles.hero}>{/* <Image src={hero} /> */}</div>
         </main>
         <div className={styles.collections}>
