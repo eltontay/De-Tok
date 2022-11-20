@@ -1,10 +1,10 @@
-import React, { useState, useCallback, useEffect } from "react";
-import Head from "next/head";
-import styles from "../styles/MintVideo.module.css";
-import { useDropzone } from "react-dropzone";
-import { Web3Storage } from "web3.storage";
-import { useContractWrite, usePrepareContractWrite } from "wagmi";
-import { DETOK_ABI, DeTok_Contract_Address } from "../constants/constants";
+import React, { useState, useCallback, useEffect } from 'react';
+import Head from 'next/head';
+import styles from '../styles/MintVideo.module.css';
+import { useDropzone } from 'react-dropzone';
+import { Web3Storage } from 'web3.storage';
+import { useContractWrite, usePrepareContractWrite } from 'wagmi';
+import { DETOK_ABI, DeTok_Contract_Address } from '../constants/constants';
 
 function makeStorageClient() {
   return new Web3Storage({ token: process.env.NEXT_PUBLIC_WEB3STORAGE_TOKEN });
@@ -13,22 +13,22 @@ function makeStorageClient() {
 const storeContent = async (files) => {
   const client = makeStorageClient();
   const cid = await client.put(files);
-  console.log("stored files with cid:", cid);
+  console.log('stored files with cid:', cid);
   // for what?
   setTimeout(3000);
   return cid;
 };
 
 const makeJsonFileObject = (json) => {
-  const blob = new Blob([JSON.stringify(json)], { type: "application/json" });
-  return new File([blob], "metadata.json");
+  const blob = new Blob([JSON.stringify(json)], { type: 'application/json' });
+  return new File([blob], 'metadata.json');
 };
 
 const hoge = async () => {
   // const cid = await storage.put(files,options);
-  console.log("get files");
+  console.log('get files');
   const storage = makeStorageClient();
-  const cid = "bafybeidtig7gruy5yirxjhbp675apd3qkrr6soawhh7bhpj7l4sdp7pawe";
+  const cid = 'bafybeidtig7gruy5yirxjhbp675apd3qkrr6soawhh7bhpj7l4sdp7pawe';
   const resdata = await storage.get(cid);
   const filesReterived = await resdata.files();
   for (const file of filesReterived) {
@@ -42,9 +42,9 @@ const hoge = async () => {
 // cid: bafybeigkdrxadzsbdeyomforg7yzvm2wrz35clnp6ifnwxxhwjohz7xvpm
 
 export default function MintVideo() {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [author, setAuthor] = useState("");
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [author, setAuthor] = useState('');
   const [video, setVideo] = useState();
   const [payable, setPayable] = useState(false);
   const [cid, setCid] = useState();
@@ -52,7 +52,7 @@ export default function MintVideo() {
   const { config } = usePrepareContractWrite({
     address: DeTok_Contract_Address,
     abi: DETOK_ABI,
-    functionName: "mintVideo",
+    functionName: 'mintVideo',
     args: [`https://${cid}.ipfs.w3s.link/`, cid, payable],
   });
 
@@ -61,7 +61,7 @@ export default function MintVideo() {
 
   useEffect(() => {
     if (cid) {
-      console.log("call contract");
+      console.log('call contract');
       write?.();
     }
   }, [cid]);
@@ -70,13 +70,14 @@ export default function MintVideo() {
     if (!video) {
       return;
     }
-    console.log("uploading...");
+    console.log('uploading...');
     const jsonFile = makeJsonFileObject({ title, description, author });
     console.log(jsonFile);
     console.log(video);
     const cid = await storeContent([video, jsonFile]);
     console.log(cid);
     setCid(cid);
+    console.log(cid);
     // setCid("bafybeidtig7gruy5yirxjhbp675apd3qkrr6soawhh7bhpj7l4sdp7pawe");
   };
 
@@ -157,8 +158,8 @@ export default function MintVideo() {
                 <input {...getInputProps()} />
                 <div className="px-4">
                   {isDragActive
-                    ? "Drop the files here ..."
-                    : "Drag & drop some files here, or click to select files"}
+                    ? 'Drop the files here ...'
+                    : 'Drag & drop some files here, or click to select files'}
                 </div>
               </div>
             )}
