@@ -4,7 +4,7 @@ export const DTok_Contract_Address =
 export const DVid_Contract_Address =
   '0xdE5Dfc54F05a4D68E1B43DC69fe242eb5b59e3a6';
 export const DeTok_Contract_Address =
-  '0x335568fFfe651DE4CB17E0FdCf9872eceDc580a4';
+  '0x073FB2e65F27524eC9D4DAC00928F510E1dBF7D1';
 
 export const DTOK_ABI = [
   {
@@ -1034,7 +1034,7 @@ export const DETOK_ABI = [
     inputs: [],
     name: 'claimToken',
     outputs: [],
-    stateMutability: 'payable',
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
