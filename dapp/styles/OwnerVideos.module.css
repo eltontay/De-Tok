@@ -1,0 +1,19 @@
+.container{
+  max-width: 80vw;
+  min-width: 80vw;
+}
+
+.title{
+    margin: 1;
+    line-height: 1.5;
+    font-size: 1rem;
+    background-color: #e6d6d6ad;
+    margin: .5rem;
+    border-radius: 3px;
+    color: rgb(0, 0, 0);
+}
+
+.title,
+.description {
+  text-align: center;
+}

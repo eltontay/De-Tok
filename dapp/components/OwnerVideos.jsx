@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useAccount, useContractRead, useProvider, useSigner } from 'wagmi';
-import styles from '../styles/BasicVideos.module.css';
+import styles from '../styles/OwnerVideos.module.css';
 
 import VideoGallery from './VideoGallery';
 
@@ -46,7 +46,7 @@ export const OwnerVideos = () => {
     }
 
     return (
-      <div className="pt-2">
+      <div className={styles.container}>
       <div className={styles.title}>
         <span className={`${styles.title.description}`}>My Videos</span>
       </div>
