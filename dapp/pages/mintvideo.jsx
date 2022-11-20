@@ -93,7 +93,6 @@ export default function MintVideo() {
     const cid = await storeContent([video, jsonFile]);
     console.log(cid);
     setCid(cid);
-    console.log(cid);
     // setCid("bafybeidtig7gruy5yirxjhbp675apd3qkrr6soawhh7bhpj7l4sdp7pawe");
   };
 
