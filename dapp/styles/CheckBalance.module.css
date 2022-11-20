@@ -1,6 +1,8 @@
 .container {
+  background-color: #ffffffad;
   margin: 1;
   min-height: 5vh;
+  min-width: 95vh;
   padding: .5rem 0;
   flex: 1;
   display: flex;

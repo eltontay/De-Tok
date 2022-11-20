@@ -63,18 +63,18 @@ export const CheckBalance = () => {
     <div>
       <div className={styles.container}>
         <button disabled={!canFetchBalance} hidden={!canFetchBalance}
-          className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+          className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow marign px-2"
           onClick={() => handleClick()}
         >
           Available DToks:{balance}
         </button>
+          { canMint ? (
+                  <ClaimTokens/>
+                ) : null }
+          { isError ? (
+            <label>{error}</label>
+          ) : null }
       </div>
-      { canMint ? (
-                <ClaimTokens/>
-              ) : null }
-      { isError ? (
-        <label>{error}</label>
-      ) : null }
   </div>
   )
 }

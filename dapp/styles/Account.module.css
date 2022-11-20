@@ -29,6 +29,7 @@
     align-items: center;
     flex-wrap: wrap;
     flex-direction: column;
+    padding: 0.5;
   }
 
   .word1 {
