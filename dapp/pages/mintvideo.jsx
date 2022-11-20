@@ -68,11 +68,11 @@ export default function MintVideo() {
   };
 
   const onDrop = useCallback(async (acceptedFiles) => {
-    // const videoFile = acceptedFiles[0];
-    // const myVideoFile = new File([videoFile], "video.mp4", {
-    //   type: videoFile.type,
-    // });
-    setVideo(acceptedFiles[0]);
+    const videoFile = acceptedFiles[0];
+    const myVideoFile = new File([videoFile], "myvideo.mp4", {
+      type: videoFile.type,
+    });
+    setVideo(myVideoFile);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
