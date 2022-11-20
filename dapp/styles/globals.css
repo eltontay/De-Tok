@@ -19,7 +19,12 @@ a {
   box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
+body {
+  /* color: white; */
+  /* background: black; */
+  background-image: url('/bg-img.jpeg');
+}
+/* @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
   }
@@ -28,4 +33,4 @@ a {
     background: black;
     background-image: url('/bg-img.jpeg');
   }
-}
+} */
