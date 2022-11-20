@@ -16,6 +16,7 @@ export const TrendingVideos = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [videoIds, setVideoIds] = useState([]);
+  const [cids, setCids] = useState([]);
   const [error, setError] = useState("");
 
     const { refetch } = useContractRead(
@@ -25,12 +26,13 @@ export const TrendingVideos = () => {
         functionName: 'getAllTrendingCid',
       },
     )
-    
+        
     const handleClick = async () => {
       const res = await refetch();
       const { status, data} = res;
       if(res.status == "success"){
         setVideoIds(data);
+        setCids(["bafybeicq7qd5ns67yfnwfclhunwifsgqptcddvhdfklnz5deopa4apr4qu","bafybeigg6vuimb2rwgmc3pfcrvwrzgg5gxjd75z74avvwxeaz47gsmwyx4"] )
       }
     }
 
@@ -41,9 +43,16 @@ export const TrendingVideos = () => {
                 Trending Videos
               </span>
           </div>
+          <label>{cids}</label>
           <div>
-             <VideoGallery></VideoGallery>
+             <VideoGallery data={{cids}}></VideoGallery>
           </div>
+          <button
+          className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow marign px-2"
+          onClick={() => handleClick()}
+        >
+         test  
+        </button>
       </div>
     )
 }

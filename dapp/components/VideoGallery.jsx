@@ -23,7 +23,10 @@ import styles from "../styles/VideoGallery.module.css";
 import { VideoComponent } from './VideoComponent';
 
 
-export default function VideoGallery({ videos }) {
+export default function VideoGallery({ cids }) {
+    console.log(cids);
+
+
     const url= "https://bafybeidtig7gruy5yirxjhbp675apd3qkrr6soawhh7bhpj7l4sdp7pawe.ipfs.w3s.link/ipfs/bafybeidtig7gruy5yirxjhbp675apd3qkrr6soawhh7bhpj7l4sdp7pawe/sample-5s.mp4";
     const type = "video/mp4";
 
