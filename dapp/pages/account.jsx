@@ -3,6 +3,7 @@ import Head from 'next/head';
 import styles from '../styles/Account.module.css';
 import VideoGallery from '../components/VideoGallery';
 import { CheckBalance } from '../components/CheckBalance';
+import { OwnerVideos } from '../components/OwnerVideos';
 import { ToastContainer, toast } from 'react-toastify';
 
 import { useAccount, useContractRead, useProvider, useSigner } from 'wagmi';
@@ -32,9 +33,8 @@ export default function Account() {
             My Videos
           </span>
           <div>
-            <VideoGallery/>
+            <OwnerVideos/>
           </div>
-          
         </div>
       </main>
     </>

@@ -1,6 +1,8 @@
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import Head from "next/head";
+import { BasicVideos } from "../components/BasicVideos";
+import { TrendingVideos } from "../components/TrendingVideos";
 
 export default function Home() {
   return (
@@ -43,6 +45,12 @@ export default function Home() {
 
           <div className={styles.hero}>{/* <Image src={hero} /> */}</div>
         </main>
+        <div>
+          <TrendingVideos/>
+        </div>
+        <div>
+          <BasicVideos/>
+        </div>
       </div>
     </>
   );
