@@ -88,8 +88,8 @@ export default function MintVideo() {
       </Head>
 
       <main className={styles.main}>
-        <div className="flex flex-col items-center h-full pt-10">
-          <div className="text-6xl font-bold pb-6">Mint Video</div>
+        <div className={styles.form}>
+          <div className="text-3xl font-bold pb-3">Mint Video</div>
           <label className="w-full font-bold">
             Title
             <input
