@@ -89,7 +89,7 @@
 .navlogo {
   /* display: inline-block; */
 
-  max-width: 45px;
+  /* max-width: 45px; */
   margin: 0 10px;
   padding: 6px;
 }
@@ -166,9 +166,9 @@
     justify-content: space-between;
     background: #1e2124;
   }
-  .navlogo {
+  /* .navlogo {
     max-width: 35px;
-  }
+  } */
 
   .titleWord,
   .word1,

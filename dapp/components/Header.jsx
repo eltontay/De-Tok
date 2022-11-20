@@ -15,15 +15,15 @@ export const Header = ({}) => {
     <header>
       <nav className={styles.navbar}>
         <div className={styles.logo}>
-          <Link href={"/"}>
-            <div className={styles.title}>
-              <span className={`${styles.titleWord} ${styles.word1}`}>De </span>
-              <span className={`${styles.titleWord} ${styles.word2}`}>Tok</span>
-              <span className={`${styles.tagtext}`}>Viral Videos</span>
-            </div>
-          </Link>
           <div className={styles.navlogo}>
-            <Image src="/video.png" alt="De-Tok Logo" width={20} height={20} tintColor='red' />
+            <Link href={"/"}>
+              <Image
+                src="/de-tok-low-resolution-logo-color-on-transparent-background.png"
+                alt="De-Tok Logo"
+                width={160}
+                height={160}
+              />
+            </Link>
           </div>
         </div>
         <ul
